@@ -20,7 +20,7 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
      public static function findIdentity($id)
      {
-        $command = Yii::$app->db->createCommand("select * from user u " .
+        $command = \Yii::$app->db->createCommand("select * from user u " .
           "inner join profile p on p.user_id = u.id " .
           "where u.id = :id")
             ->bindParam(":id", $id);
