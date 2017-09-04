@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class BaseController extends Controller
 {
+    protected $errors;
+
     protected function getMenuOptions()
     {
         return [
