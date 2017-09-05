@@ -50,5 +50,69 @@ class Role
         $this->user = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param int $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\Collection $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+    }
+
 }
 

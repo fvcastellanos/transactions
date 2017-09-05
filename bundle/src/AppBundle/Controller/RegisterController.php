@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 class RegisterController extends BaseController
 {
 
+    private $view = "register/sign-up.html.twig";
+
     private $logger;
     private $service;
 
@@ -22,10 +24,10 @@ class RegisterController extends BaseController
      * RegisterController constructor.
      * @param $logger
      */
-    public function __construct(LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, RegistrationService $service)
     {
         $this->logger = $logger;
-        $this->service = new RegistrationService($this->getDoctrine());
+        $this->service = $service;
     }
 
     /**
@@ -40,24 +42,30 @@ class RegisterController extends BaseController
         if ($form->isSubmitted() && $form->isValid()) {
             $model = $form->getData();
 
-            $validator = $this->get('validator');
-            $this->errors = $validator->validate($model);
-            $this->errors[] = $model->isValidPassword();
+            $validationErrors = $this->validateFormModel($model);
 
+            if ($this->hasErrors($validationErrors)) {
+                $this->logger->info("validation errors: " . (string) $validationErrors);
 
-            $this->logger->info("validation errors: " . (string) $this->errors);
-            if (count($this->errors) == 0) {
-                $this->logger->info('getting the model, name: ' . $model->name);
-                $this->service->registerUser($model);
+                return $this->renderValidationErrors($this->view, $form, $validationErrors);
             }
 
-            $this->logger->info("errors: " . (string) $this->errors);
+            if ($model->password != $model->confirmPassword) {
+                return $this->renderAppErrors($this->view, $form, "passwords should match");
+            }
+
+            $appErrors = $this->service->registerUser($model);
+
+            if ($this->hasErrors($appErrors)) {
+
+                $this->logger->info("application errors: ");
+                return $this->renderAppErrors($this->view, $form, $appErrors);
+            }
+
+            return $this->redirectToRoute("homepage");
         }
 
-        return $this->renderWithMenu("register/sign-up.html.twig", [
-            'form' => $form->createView(),
-            'errors' => $this->errors
-        ]);
+        return $this->renderWithMenu($this->view, [ "form" => $form->createView() ]);
     }
 
     private function buildForm($model) {

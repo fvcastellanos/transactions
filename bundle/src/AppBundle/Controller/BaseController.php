@@ -28,4 +28,22 @@ class BaseController extends Controller
         $parameters = array_merge(["menu" => $this->getMenuOptions()], $model);
         return $this->render($view, $parameters);
     }
+
+    protected function renderValidationErrors($view, $form, $validationErrors) {
+        $this->renderWithMenu($view, [ "form" => $form, "errors" => $validationErrors]);
+    }
+
+    protected function renderAppErrors($view, $form, $errors) {
+        $this->renderWithMenu($view, [ "form" => $form, "app_errors" => $errors]);
+    }
+
+    protected function validateFormModel($model) {
+        $validator = $this->get('validator');
+        return $validator->validate($model);
+    }
+
+    protected function hasErrors($errors) {
+        return count($errors) > 0;
+    }
+
 }

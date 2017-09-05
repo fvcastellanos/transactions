@@ -3,44 +3,40 @@
 namespace AppBundle\Service;
 
 use AppBundle\Domain\View\SignUpViewModel;
-use AppBundle\Entity\Profile;
-use AppBundle\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use AppBundle\Model\RoleDao;
+use AppBundle\Model\UserDao;
 
 class RegistrationService
 {
-    private $repository;
     private $errors;
+    private $userDao;
+    private $roleDao;
 
     /**
      * RegistrationService constructor.
      */
-    public function __construct(Registry $registry)
+    public function __construct(UserDao $userDao, RoleDao $roleDao)
     {
-        $this->repository = $registry;
         $this->errors = array();
+        $this->userDao = $userDao;
+        $this->roleDao = $roleDao;
     }
 
     public function registerUser(SignUpViewModel $model) {
-        $user = $this->repository
-            ->getRepository(User::class)
-            ->findOneBy(['user' => $model->user]);
+        $user = $this->userDao->findByUserName($model->user);
 
-        if (!isset($user)) {
-            $usr = new User();
-
-
+        if (isset($user)) {
+            $this->addError("user: " . $user->getUser() . " already exists");
+            return $this->errors;
         }
 
-        $this->addError("User: " . $user->user . " already exists");
+        $role = $this->roleDao->getUserRole();
+        $this->userDao->createUser($model->user, $model->password, $role);
 
-        return
+        return $this->errors;
     }
 
     private function addError($error) {
         $this->errors[] = $error;
     }
-
-
-
 }

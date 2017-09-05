@@ -44,6 +44,15 @@
                     </div>
                     {{ form_row(form.create, { 'attr' : { 'class' : 'btn btn-primary' }}) }}
                 {{ form_end(form) }}
+
+                {% if app_errors is defined %}
+                    <ul>
+                        {% for error in app_errors %}
+                            <li class="error-list">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
             </div>
         </div>
     </div>

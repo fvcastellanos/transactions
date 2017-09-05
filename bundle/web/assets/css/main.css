@@ -22,3 +22,10 @@ div.form-group ul {
 form {
     margin-bottom: 1.5em;
 }
+
+.error-list {
+    padding-left: 0.5em;
+    list-style: circle;
+    color: red;
+    font-size: 14px;
+}
