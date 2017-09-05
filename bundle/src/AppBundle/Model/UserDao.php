@@ -6,6 +6,7 @@ use AppBundle\Service\ShaUtils;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use AppBundle\Entity\User;
 use AppBundle\Entity\Role;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class UserDao extends BaseDao
 {
@@ -30,9 +31,9 @@ class UserDao extends BaseDao
 
         $user->setUser($userName);
         $user->setPassword($newPassword);
-        $user->setRole($role);
+        $user->setRole(new ArrayCollection([ $role ]));
 
-        $role->setUser($user);
+        $role->setUser(new ArrayCollection([ $user]));
 
         $em = $this->repository->getManager();
 

@@ -24,7 +24,8 @@ class RegisterController extends BaseController
      * RegisterController constructor.
      * @param $logger
      */
-    public function __construct(LoggerInterface $logger, RegistrationService $service)
+    public function __construct(LoggerInterface $logger,
+                                RegistrationService $service)
     {
         $this->logger = $logger;
         $this->service = $service;
@@ -54,18 +55,25 @@ class RegisterController extends BaseController
                 return $this->renderAppErrors($this->view, $form, "passwords should match");
             }
 
+            $this->logger->info("everything is right, proceeding to register the user: ", $model->user);
             $appErrors = $this->service->registerUser($model);
 
             if ($this->hasErrors($appErrors)) {
-
                 $this->logger->info("application errors: ");
                 return $this->renderAppErrors($this->view, $form, $appErrors);
             }
 
-            return $this->redirectToRoute("homepage");
+            return $this->redirectToRoute("activate-user");
         }
 
         return $this->renderWithMenu($this->view, [ "form" => $form->createView() ]);
+    }
+
+    /**
+     * @Route("/activate-user", name="activate-user")
+     */
+    public function activateAction() {
+
     }
 
     private function buildForm($model) {
