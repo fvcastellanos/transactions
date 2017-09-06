@@ -39,13 +39,13 @@ class SignUpViewModel
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min = 6, max = 100)
+     * @Assert\Length(min = 6, max = 50)
      */
     public $password;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min = 6, max = 100)
+     * @Assert\Length(min = 6, max = 50)
      */
     public $confirmPassword;
 
