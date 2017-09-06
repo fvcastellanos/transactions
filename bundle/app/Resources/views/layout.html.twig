@@ -37,11 +37,14 @@
         </div>
 
         <header class="row" id="header">
-            <div class="text-center">
-                <img src="{{ asset('assets/images/header.jpg') }}" class="rounded img-fluid" alt="Responsive image">
-            </div>
-            <div id="bread">
-                {% block breadcrumb %}{% endblock %}
+            <div class="col-md-12">
+                <div class="text-center">
+                    <img src="{{ asset('assets/images/header.jpg') }}" class="rounded img-fluid" alt="Responsive image">
+                </div>
+                <div id="bread">
+                    {% block breadcrumb %}{% endblock %}
+                </div>
+
             </div>
 
         </header>
