@@ -1,0 +1,40 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="/">Home</a>
+        <a class="breadcrumb-item active" href="/sign-up">Sign Up</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Activate User</h1>
+                <p>
+                    Welcome!, please review your information and activate your account:
+                </p>
+                <table class="table">
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ profile.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>{{ profile.phone }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ profile.email }}</td>
+                    </tr>
+                </table>
+                <form action="/activate-user" method="post">
+                    <input type="hidden" value="{{ user }}" name="user"/>
+                    <input type="submit" class="btn btn-primary" value="Activate" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

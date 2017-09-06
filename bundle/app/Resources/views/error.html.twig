@@ -1,0 +1,24 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="/">Home</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>
+                    Application Error
+                </h1>
+                <div class="alert-danger">
+                    {{ error }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

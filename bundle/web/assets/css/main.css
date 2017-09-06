@@ -1,0 +1,31 @@
+header {
+    margin-top: 4.5em;
+    margin-bottom: 0.5em;
+}
+
+#content {
+    padding-bottom: 2.5em;
+}
+
+#bread {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+div.form-group ul {
+    list-style: none;
+    padding-left: 0.5em;
+    color: red;
+    font-size: 12px;
+}
+
+form {
+    margin-bottom: 1.5em;
+}
+
+.error-list {
+    padding-left: 0.5em;
+    list-style: circle;
+    color: red;
+    font-size: 14px;
+}
