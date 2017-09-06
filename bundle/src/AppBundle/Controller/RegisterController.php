@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Domain\View\ProfileViewModel;
 use AppBundle\Domain\View\SignUpViewModel;
 use AppBundle\Service\RegistrationService;
 use Psr\Log\LoggerInterface;
@@ -37,7 +38,7 @@ class RegisterController extends BaseController
      */
     public function signUpAction(Request $request) {
         $model = new SignUpViewModel();
-        $form = $this->buildForm($model);
+        $form = $this->buildSingUpForm($model);
 
         $form->handleRequest($request);
 
@@ -57,29 +58,53 @@ class RegisterController extends BaseController
             }
 
             $this->logger->info("everything is right, proceeding to register the user: ", [ $model->user ]);
-            $appErrors = $this->service->registerUser($model);
+            $result = $this->service->registerUser($model);
 
-            if ($this->hasErrors($appErrors)) {
-                $this->logger->info("application errors: ");
-                return $this->renderAppErrors($this->signUpView, $form, $appErrors);
+            if ($result->hasErrors()) {
+                $this->logger->info("application errors: " . $result->getErrors());
+                return $this->renderAppErrors($this->signUpView, $form, $result->getErrors());
             }
 
-            return $this->redirectToRoute("activate-user");
+            $userName = $result->getObject()->getUser();
+            return $this->redirectToRoute($this->activateView, [ "user" => $userName ]);
         }
 
         return $this->renderWithMenu($this->signUpView, [ "form" => $form->createView() ]);
     }
 
     /**
-     * @Route("/activate-user/{user}", name="activate-user")
+     * @Route("/activate-user/{user}", name="activate-user", methods="GET")
      */
     public function activateAction($user) {
-        $profile = $this->service->activateUser($user);
+        $result = $this->service->getProfileByUserName($user);
 
-        return $this->renderWithMenu($this->activateView, ["profile" => $profile]);
+        if ($result->hasErrors()) {
+            return $this->renderError($result->getErrors());
+        }
+
+        $profile = $result->getObject();
+        $profileView = new ProfileViewModel($profile->getName(), $profile->getPhone(), $profile->getEmail());
+
+        return $this->renderWithMenu($this->activateView, ["profile" => $profileView, "user" => $user]);
     }
 
-    private function buildForm($model) {
+    /**
+     * @Route("/activate-user", name="confirm-user", methods="POST")
+     */
+    public function confirmAction(Request $request) {
+        $userName = $_POST['user'];
+
+        $result = $this->service->activateUser($userName);
+
+        if ($result->hasErrors()) {
+            return $this->renderError($result->getErrors());
+        }
+
+        return $this->redirectToRoute("homepage");
+
+    }
+
+    private function buildSingUpForm($model) {
 
         return $this->createFormBuilder($model)
             ->add('name', TextType::class)
@@ -90,5 +115,11 @@ class RegisterController extends BaseController
             ->add('confirmPassword', PasswordType::class)
             ->add('create', SubmitType::class, ['label' => 'Sign Up'])
             ->getForm();
+    }
+
+    private function buildActivateForm($model) {
+        $this->createFormBuilder()
+            ->add('name', TextType::class, ['enabled' => false])
+            ->add('activate', SubmitType::class, ['label' => 'Activate']);
     }
 }

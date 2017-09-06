@@ -11,10 +11,28 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h1>Activate User</h1>
                 <p>
-                    Name: {{ profile.name }}
+                    Welcome!, please review your information and activate your account:
                 </p>
-                Please activate your account: <a href="$">here!</a>
+                <table class="table">
+                    <tr>
+                        <td>Name</td>
+                        <td>{{ profile.name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone</td>
+                        <td>{{ profile.phone }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>{{ profile.email }}</td>
+                    </tr>
+                </table>
+                <form action="/activate-user" method="post">
+                    <input type="hidden" value="{{ user }}" name="user"/>
+                    <input type="submit" class="btn btn-primary" value="Activate" />
+                </form>
             </div>
         </div>
     </div>
