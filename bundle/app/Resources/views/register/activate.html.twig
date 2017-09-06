@@ -3,16 +3,18 @@
 {% block breadcrumb %}
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="/">Home</a>
-        <a class="breadcrumb-item active" href="/">Sign Up</a>
+        <a class="breadcrumb-item active" href="/sign-up">Sign Up</a>
     </nav>
 {% endblock %}
 
 {% block body %}
-
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                Please activate your account: <a href="$" class="btn btn-success">aqui!</a>
+                <p>
+                    Name: {{ profile.name }}
+                </p>
+                Please activate your account: <a href="$">here!</a>
             </div>
         </div>
     </div>

@@ -15,7 +15,8 @@ use Symfony\Component\HttpFoundation\Request;
 class RegisterController extends BaseController
 {
 
-    private $view = "register/sign-up.html.twig";
+    private $signUpView = "register/sign-up.html.twig";
+    private $activateView = "register/activate.html.twig";
 
     private $logger;
     private $service;
@@ -48,32 +49,34 @@ class RegisterController extends BaseController
             if ($this->hasErrors($validationErrors)) {
                 $this->logger->info("validation errors: " . (string) $validationErrors);
 
-                return $this->renderValidationErrors($this->view, $form, $validationErrors);
+                return $this->renderValidationErrors($this->signUpView, $form, $validationErrors);
             }
 
             if ($model->password != $model->confirmPassword) {
-                return $this->renderAppErrors($this->view, $form, "passwords should match");
+                return $this->renderAppErrors($this->signUpView, $form, "passwords should match");
             }
 
-            $this->logger->info("everything is right, proceeding to register the user: ", $model->user);
+            $this->logger->info("everything is right, proceeding to register the user: ", [ $model->user ]);
             $appErrors = $this->service->registerUser($model);
 
             if ($this->hasErrors($appErrors)) {
                 $this->logger->info("application errors: ");
-                return $this->renderAppErrors($this->view, $form, $appErrors);
+                return $this->renderAppErrors($this->signUpView, $form, $appErrors);
             }
 
             return $this->redirectToRoute("activate-user");
         }
 
-        return $this->renderWithMenu($this->view, [ "form" => $form->createView() ]);
+        return $this->renderWithMenu($this->signUpView, [ "form" => $form->createView() ]);
     }
 
     /**
-     * @Route("/activate-user", name="activate-user")
+     * @Route("/activate-user/{user}", name="activate-user")
      */
-    public function activateAction() {
+    public function activateAction($user) {
+        $profile = $this->service->activateUser($user);
 
+        return $this->renderWithMenu($this->activateView, ["profile" => $profile]);
     }
 
     private function buildForm($model) {

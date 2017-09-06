@@ -43,5 +43,4 @@ class UserDao extends BaseDao
 
         return $user;
     }
-
 }

@@ -37,4 +37,25 @@ class ProfileDao extends BaseDao
 
         return $profile;
     }
+
+    public function activateProfile(Profile $profile) {
+        $profile->setActive(1);
+
+        $this->entityManager->merge($profile);
+        $this->entityManager->flush();
+
+        return $profile;
+    }
+
+    public function findProfileByUserName($userName) {
+        $user = $this->repository
+            ->getRepository(User::class)
+            ->findOneBy(["user" => $userName]);
+
+        $profile = $this->repository
+            ->getRepository(Profile::class)
+            ->findOneBy(["user" => $user]);
+
+        return $profile;
+    }
 }

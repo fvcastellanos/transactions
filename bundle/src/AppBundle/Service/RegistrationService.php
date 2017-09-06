@@ -3,6 +3,7 @@
 namespace AppBundle\Service;
 
 use AppBundle\Domain\View\SignUpViewModel;
+use AppBundle\Entity\User;
 use AppBundle\Model\ProfileDao;
 use AppBundle\Model\RoleDao;
 use AppBundle\Model\UserDao;
@@ -30,7 +31,6 @@ class RegistrationService
         $this->roleDao = $roleDao;
         $this->profileDao = $profileDao;
         $this->logger = $logger;
-
     }
 
     public function registerUser(SignUpViewModel $model) {
@@ -47,13 +47,32 @@ class RegistrationService
             $user = $this->userDao->createUser($model->user, $model->password, $role);
 
             $this->profileDao->createUserProfile($model->name, $model->phone, $model->email, $user);
-
         } catch (Exception $ex) {
             $this->logger->error("can't register user: ", $ex);
             $this->addError($ex->getMessage());
         }
 
         return $this->errors;
+    }
+
+    public function activateUser($userName) {
+        try {
+            $user = $this->userDao->findByUserName($userName);
+
+            if (!isset($user)) {
+                $this->addError("user not found");
+                return $this->errors;
+            }
+
+            $profile = $this->profileDao->findProfileByUserName($userName);
+
+            return $profile;
+
+
+        } catch (Exception $ex) {
+            $this->logger->error("can't register user: ", $ex);
+            $this->addError($ex->getMessage());
+        }
     }
 
     private function addError($error) {
