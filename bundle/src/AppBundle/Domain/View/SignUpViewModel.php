@@ -14,6 +14,12 @@ class SignUpViewModel
 {
     /**
      * @Assert\NotBlank()
+     * @Assert\Length(min = 10, max = 100)
+     */
+    public $account;
+
+    /**
+     * @Assert\NotBlank()
      * @Assert\Length(min = 10, max = 150)
      */
     public $name;

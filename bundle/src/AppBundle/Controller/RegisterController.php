@@ -107,6 +107,7 @@ class RegisterController extends BaseController
     private function buildSingUpForm($model) {
 
         return $this->createFormBuilder($model)
+            ->add('account', TextType::class)
             ->add('name', TextType::class)
             ->add('phone', TextType::class)
             ->add('email', EmailType::class)

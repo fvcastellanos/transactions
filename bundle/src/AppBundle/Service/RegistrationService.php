@@ -4,6 +4,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Domain\Result;
 use AppBundle\Domain\View\SignUpViewModel;
+use AppBundle\Model\AccountDao;
 use AppBundle\Model\ProfileDao;
 use AppBundle\Model\RoleDao;
 use AppBundle\Model\UserDao;
@@ -16,6 +17,7 @@ class RegistrationService extends BaseService
     private $userDao;
     private $roleDao;
     private $profileDao;
+    private $accountDao;
     private $logger;
 
     /**
@@ -24,12 +26,14 @@ class RegistrationService extends BaseService
     public function __construct(LoggerInterface $logger,
                                 UserDao $userDao,
                                 RoleDao $roleDao,
+                                AccountDao $accountDao,
                                 ProfileDao $profileDao)
     {
         $this->errors = array();
         $this->userDao = $userDao;
         $this->roleDao = $roleDao;
         $this->profileDao = $profileDao;
+        $this->accountDao = $accountDao;
         $this->logger = $logger;
     }
 
@@ -45,7 +49,9 @@ class RegistrationService extends BaseService
             $role = $this->roleDao->getUserRole();
             $user = $this->userDao->createUser($model->user, $model->password, $role);
 
-            $this->profileDao->createUserProfile($model->name, $model->phone, $model->email, $user);
+            $profile = $this->profileDao->createUserProfile($model->name, $model->phone, $model->email, $user);
+
+            $this->accountDao->createAccount($model->account, "GTQ", $profile);
 
             return $this->returnValue($user);
         } catch (Exception $ex) {

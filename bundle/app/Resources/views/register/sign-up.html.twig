@@ -14,6 +14,11 @@
                 <h1>Register</h1>
                 {{ form_start(form) }}
                     <div class="form-group">
+                        {{ form_label(form.account) }}
+                        {{ form_widget(form.account, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.account) }}
+                    </div>
+                    <div class="form-group">
                         {{ form_label(form.name) }}
                         {{ form_widget(form.name, { 'attr' : { 'class' : 'form-control' }}) }}
                         {{ form_errors(form.name) }}

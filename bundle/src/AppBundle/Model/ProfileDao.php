@@ -23,7 +23,7 @@ class ProfileDao extends BaseDao
         parent::__construct($registry);
     }
 
-    public function createUserProfile($name, $phone, $email, User $user) {
+    public function createUserProfile($name, $phone, $email, User $user) : Profile {
         $profile = new Profile();
 
         $profile->setName($name);
