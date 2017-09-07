@@ -66,7 +66,7 @@ class RegisterController extends BaseController
             }
 
             $userName = $result->getObject()->getUser();
-            return $this->redirectToRoute($this->activateView, [ "user" => $userName ]);
+            return $this->redirectToRoute("activate-user", [ "user" => $userName ]);
         }
 
         return $this->renderWithMenu($this->signUpView, [ "form" => $form->createView() ]);

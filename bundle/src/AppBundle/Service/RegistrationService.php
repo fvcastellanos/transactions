@@ -4,12 +4,11 @@ namespace AppBundle\Service;
 
 use AppBundle\Domain\Result;
 use AppBundle\Domain\View\SignUpViewModel;
-use AppBundle\Entity\User;
 use AppBundle\Model\ProfileDao;
 use AppBundle\Model\RoleDao;
 use AppBundle\Model\UserDao;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class RegistrationService extends BaseService
 {

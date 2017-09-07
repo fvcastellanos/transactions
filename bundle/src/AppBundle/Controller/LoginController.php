@@ -9,6 +9,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Domain\View\LoginViewModel;
+use AppBundle\Service\LoginService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -19,6 +20,16 @@ use Symfony\Component\HttpFoundation\Request;
 class LoginController extends BaseController
 {
     private $loginView = "login/login.html.twig";
+    private $service;
+
+    /**
+     * LoginController constructor.
+     * @param $service
+     */
+    public function __construct(LoginService $service)
+    {
+        $this->service = $service;
+    }
 
     /**
      * @Route("/login", name="login")
@@ -36,6 +47,14 @@ class LoginController extends BaseController
             if ($this->hasErrors($validationErrors)) {
                 return $this->renderValidationErrors($this->loginView, $form, $validationErrors);
             }
+
+            $result = $this->service->validateUser($model->user, $model->password);
+
+            if ($result->hasErrors()) {
+                return $this->renderAppErrors($this->loginView, $form, $result->getErrors());
+            }
+
+            $_SESSION['loggedUser'] = $result->getObject();
         }
 
         return $this->renderWithMenu($this->loginView, [ 'form' => $form->createView()]);

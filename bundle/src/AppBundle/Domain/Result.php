@@ -38,7 +38,7 @@ class Result
      */
     public function getErrors()
     {
-        return $this->errors;
+        return array($this->errors);
     }
 
     public function hasErrors() {
