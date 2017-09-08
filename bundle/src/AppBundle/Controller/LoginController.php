@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Domain\View\LoginViewModel;
 use AppBundle\Service\LoginService;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -19,16 +20,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 class LoginController extends BaseController
 {
+    private $logger;
     private $loginView = "login/login.html.twig";
-    private $service;
 
     /**
      * LoginController constructor.
-     * @param $service
+     * @param $loginService
      */
-    public function __construct(LoginService $service)
+    public function __construct(LoginService $loginService,
+                                LoggerInterface $logger)
     {
-        $this->service = $service;
+        parent::__construct($loginService);
+        $this->logger = $logger;
     }
 
     /**
@@ -48,16 +51,35 @@ class LoginController extends BaseController
                 return $this->renderValidationErrors($this->loginView, $form, $validationErrors);
             }
 
-            $result = $this->service->validateUser($model->user, $model->password);
+            $result = $this->loginService->validateUser($model->user, $model->password);
 
             if ($result->hasErrors()) {
                 return $this->renderAppErrors($this->loginView, $form, $result->getErrors());
             }
 
-            $_SESSION['loggedUser'] = $result->getObject();
+            $this->storeLoggedUser($result->getObject());
+
+            return $this->redirectToRoute("welcome");
         }
 
         return $this->renderWithMenu($this->loginView, [ 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logoutAction(Request $request) {
+        $this->logoutUser();
+
+        return $this->redirectToRoute("homepage");
+    }
+
+    /**
+     * @Route("/welcome", name="welcome")
+     */
+    public function welcomeAction(Request $request) {
+
+        return $this->renderWithMenu("login/welcome.html.twig", ['user' => $this->getLoggedUser()]);
     }
 
     private function buildLoginForm($model) {

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Profile;
+use AppBundle\Service\LoginService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -14,6 +15,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
  */
 class ProfileController extends BaseController
 {
+    /**
+     * ProfileController constructor.
+     */
+    public function __construct(LoginService $loginService)
+    {
+        parent::__construct($loginService);
+    }
+
+
     /**
      * Lists all profile entities.
      *

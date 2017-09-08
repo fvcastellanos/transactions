@@ -28,7 +28,7 @@
                     <ul class="navbar-nav mr-auto">
                         {% for option in menu %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ option.link }}">{{ option.name }}</a>
+                                <a class="nav-link" href="{{ path(option.route) }}">{{ option.name }}</a>
                             </li>
                         {% endfor %}
                     </ul>

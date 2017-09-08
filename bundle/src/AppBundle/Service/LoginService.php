@@ -65,4 +65,52 @@ class LoginService extends BaseService
         return $this->returnValue($loggedUser);
     }
 
+    public function getMenuOptions($userName) {
+
+        $this->logger->info("getting menu options for user: ", [ $userName ]);
+        if (!isset($userName)) {
+            $this->logger->info("user not defined: ", [ $userName ]);
+            return [
+                ["name" => "Home", "route" => "homepage"],
+                ["name" => "Sign Up", "route" => "register"],
+                ["name" => "Login", "route" => "login"],
+            ];
+        }
+
+        $roles = $this->getUserRoles($userName);
+        $options = array();
+
+        $this->logger->info("information found for user: ", [ $userName ]);
+        foreach ($roles as  $role) {
+            if ($role->getName() == 'ADMIN') {
+                $this->logger->info("pulling admin options for user: ", [ $userName ]);
+                $options = array_merge($options, [
+//                    ["name" => "Accounts", "route" => "accounts"],
+                    ["name" => "Users", "route" => "profile_show"],
+//                    ["name" => "Deposit", "route" => "deposit-inquiry"],
+                ]);
+            }
+
+            if ($role->getName() == 'USER') {
+                $this->logger->info("pulling user options for user: ", [ $userName ]);
+                $options = array_merge($options, [
+//                    ["name" => "Beneficiaries", "route" => "beneficiaries"],
+//                    ["name" => "Transfers", "route" => "transfers"],
+//                    ["name" => "Deposit", "route" => "deposit"],
+//                    ["name" => "Transactions", "route" => "transactions"],
+                ]);
+            }
+        }
+
+        $options[] = ["name" => "Logout", "route" => "logout"];
+
+        return $options;
+    }
+
+    private function getUserRoles($userName) {
+        $user = $this->userDao->findByUserName($userName);
+
+        return $user->getRole();
+    }
+
 }

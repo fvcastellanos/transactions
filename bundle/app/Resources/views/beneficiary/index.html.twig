@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Beneficiaries list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Alias</th>
+                <th>Maxamounttransfer</th>
+                <th>Transactionsquota</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for beneficiary in beneficiaries %}
+            <tr>
+                <td><a href="{{ path('beneficiary_show', { 'id': beneficiary.id }) }}">{{ beneficiary.id }}</a></td>
+                <td>{{ beneficiary.alias }}</td>
+                <td>{{ beneficiary.maxAmountTransfer }}</td>
+                <td>{{ beneficiary.transactionsQuota }}</td>
+                <td>{% if beneficiary.created %}{{ beneficiary.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('beneficiary_show', { 'id': beneficiary.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('beneficiary_edit', { 'id': beneficiary.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('beneficiary_new') }}">Create a new beneficiary</a>
+        </li>
+    </ul>
+{% endblock %}

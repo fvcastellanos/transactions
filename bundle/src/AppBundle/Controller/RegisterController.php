@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Domain\View\ProfileViewModel;
 use AppBundle\Domain\View\SignUpViewModel;
+use AppBundle\Service\LoginService;
 use AppBundle\Service\RegistrationService;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -27,8 +28,10 @@ class RegisterController extends BaseController
      * @param $logger
      */
     public function __construct(LoggerInterface $logger,
-                                RegistrationService $service)
+                                RegistrationService $service,
+                                LoginService $loginService)
     {
+        parent::__construct($loginService);
         $this->logger = $logger;
         $this->service = $service;
     }
