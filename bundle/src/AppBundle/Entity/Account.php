@@ -96,7 +96,7 @@ class Account
     /**
      * @return Profile
      */
-    public function getProfile(): Profile
+    public function getProfile()
     {
         return $this->profile;
     }

@@ -69,10 +69,24 @@ class RegisterController extends BaseController
             }
 
             $userName = $result->getObject()->getUser();
+//            return $this->redirectToRoute("activate-user", [ "user" => $userName ]);
             return $this->redirectToRoute("activate-user", [ "user" => $userName ]);
         }
 
         return $this->renderWithMenu($this->signUpView, [ "form" => $form->createView() ]);
+    }
+
+    /**
+     * @Route("/activate-user", name="list-users", methods="GET")
+     */
+    public function listUsers() {
+        $result = $this->service->getUserList();
+
+        if ($result->hasErrors()) {
+            return $this->render('error.html.twig', ['error' => $result->getErrors()]);
+        }
+
+        return $this->renderWithMenu("register/user-list.html.twig", ['users' => $result->getObject()]);
     }
 
     /**

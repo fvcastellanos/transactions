@@ -2,8 +2,8 @@
 
 {% block breadcrumb %}
     <nav class="breadcrumb">
-        <a class="breadcrumb-item" href="/">Home</a>
-        <a class="breadcrumb-item active" href="/sign-up">Sign Up</a>
+        <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('register') }}">Sign Up</a>
     </nav>
 {% endblock %}
 
@@ -11,11 +11,9 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Activate User</h1>
-                <p>
-                    Welcome {{ profile.name }}!, we'll review your information and activate your account:
-                </p>
+                <h1>Users list</h1>
                 <table class="table">
+{#
                     <tr>
                         <td>Name</td>
                         <td>{{ profile.name }}</td>
@@ -28,14 +26,9 @@
                         <td>Email</td>
                         <td>{{ profile.email }}</td>
                     </tr>
+#}
                 </table>
                 <a href="{{ path('homepage') }}" class="btn btn-success">Home</a>
-{#
-                <form action="/activate-user" method="post">
-                    <input type="hidden" value="{{ user }}" name="user"/>
-                    <input type="submit" class="btn btn-primary" value="Activate" />
-                </form>
-#}
             </div>
         </div>
     </div>

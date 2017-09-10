@@ -8,7 +8,6 @@
 
 namespace AppBundle\Model;
 
-
 use AppBundle\Entity\Account;
 use AppBundle\Entity\Profile;
 use Doctrine\Bundle\DoctrineBundle\Registry;
@@ -30,6 +29,25 @@ class AccountDao extends BaseDao
         $this->entityManager->flush();
 
         return $account;
+    }
+
+    public function associateAccountToProfile(Account $account, Profile $profile) {
+        $account->setProfile($profile);
+
+        $this->entityManager->merge($account);
+        $this->entityManager->flush();
+    }
+
+    public function findByAccountNumber($accountNumber){
+        $account = $this->repository->getRepository(Account::class)
+            ->findOneBy(['number' => $accountNumber]);
+
+        return $account;
+    }
+
+    public function findAccountsWithProfile() {
+        return $this->repository->getRepository(Account::class)
+            ->findBy(['profile' => 'not null']);
     }
 
 }

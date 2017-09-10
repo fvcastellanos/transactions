@@ -8,6 +8,7 @@ use AppBundle\Model\AccountDao;
 use AppBundle\Model\ProfileDao;
 use AppBundle\Model\RoleDao;
 use AppBundle\Model\UserDao;
+use MongoDB\Driver\Exception\ExecutionTimeoutException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
@@ -46,12 +47,24 @@ class RegistrationService extends BaseService
                 return $this->returnError("user: " . $user->getUser() . " already exists");
             }
 
+            $account = $this->accountDao->findByAccountNumber($model->account);
+
+            if (!isset($account)) {
+                return $this->returnError("account: " . $model->account . " doesn't exists");
+            }
+
+            $profile = $account->getProfile();
+
+            if (isset($profile)) {
+                return $this->returnError("account: " . $model->account . " already assigned to another user");
+            }
+
             $role = $this->roleDao->getUserRole();
             $user = $this->userDao->createUser($model->user, $model->password, $role);
 
             $profile = $this->profileDao->createUserProfile($model->name, $model->phone, $model->email, $user);
 
-            $this->accountDao->createAccount($model->account, "GTQ", $profile);
+            $this->accountDao->associateAccountToProfile($account, $profile);
 
             return $this->returnValue($user);
         } catch (Exception $ex) {
@@ -105,6 +118,17 @@ class RegistrationService extends BaseService
         } catch (Exception $ex) {
             $this->logger->error("can't register user: ", $ex);
             return $this->returnError("can't register user: " . $ex->getMessage());
+        }
+    }
+
+    public function getUserList() : Result {
+        try {
+            $profiles = $this->accountDao->findAccountsWithProfile();
+
+            return $this->returnValue($profiles);
+        } catch (\Exception $ex) {
+            $this->logger->error("can't get user list: ", [$ex]);
+            return $this->returnError("can't get user list: " . $ex->getMessage());
         }
     }
 
