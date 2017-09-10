@@ -2,8 +2,8 @@
 
 {% block breadcrumb %}
     <nav class="breadcrumb">
-        <a class="breadcrumb-item" href="/">Home</a>
-        <a class="breadcrumb-item active" href="/">Sign Up</a>
+        <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('register') }}">Sign Up</a>
     </nav>
 {% endblock %}
 
@@ -52,13 +52,8 @@
                 {{ form_end(form) }}
 
                 {% if app_errors is defined %}
-                    <ul>
-                        {% for error in app_errors %}
-                            <li class="error-list">{{ error }}</li>
-                        {% endfor %}
-                    </ul>
+                    {{ utils.appErrors(app_errors) }}
                 {% endif %}
-
             </div>
         </div>
     </div>

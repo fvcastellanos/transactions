@@ -57,19 +57,18 @@ class RegisterController extends BaseController
             }
 
             if ($model->password != $model->confirmPassword) {
-                return $this->renderAppErrors($this->signUpView, $form, "passwords should match");
+                return $this->renderAppErrors($this->signUpView, $form, ["passwords should match"]);
             }
 
             $this->logger->info("everything is right, proceeding to register the user: ", [ $model->user ]);
             $result = $this->service->registerUser($model);
 
             if ($result->hasErrors()) {
-                $this->logger->info("application errors: " . $result->getErrors());
+                $this->logger->info("application errors: ", $result->getErrors());
                 return $this->renderAppErrors($this->signUpView, $form, $result->getErrors());
             }
 
             $userName = $result->getObject()->getUser();
-//            return $this->redirectToRoute("activate-user", [ "user" => $userName ]);
             return $this->redirectToRoute("activate-user", [ "user" => $userName ]);
         }
 
@@ -77,16 +76,16 @@ class RegisterController extends BaseController
     }
 
     /**
-     * @Route("/activate-user", name="list-users", methods="GET")
+     * @Route("/list-users", name="list-users", methods="GET")
      */
     public function listUsers() {
-        $result = $this->service->getUserList();
+        $result = $this->service->getAccountList();
 
         if ($result->hasErrors()) {
             return $this->render('error.html.twig', ['error' => $result->getErrors()]);
         }
 
-        return $this->renderWithMenu("register/user-list.html.twig", ['users' => $result->getObject()]);
+        return $this->renderWithMenu("register/user-list.html.twig", ['accounts' => $result->getObject()]);
     }
 
     /**
@@ -100,18 +99,35 @@ class RegisterController extends BaseController
         }
 
         $profile = $result->getObject();
-        $profileView = new ProfileViewModel($profile->getName(), $profile->getPhone(), $profile->getEmail());
+        $profileView = new ProfileViewModel($profile->getName(), $profile->getPhone(), $profile->getEmail(), $profile->getActive());
 
         return $this->renderWithMenu($this->activateView, ["profile" => $profileView, "user" => $user]);
     }
 
     /**
-     * @Route("/activate-user", name="confirm-user", methods="POST")
+     * @Route("/confirm-user/{user}", name="confirm-user", methods="GET")
      */
-    public function confirmAction(Request $request) {
-        $userName = $_POST['user'];
+    public function confirmAction($user) {
+        $result = $this->service->getProfileByUserName($user);
 
-        $result = $this->service->activateUser($userName);
+        if ($result->hasErrors()) {
+            return $this->renderError($result->getErrors());
+        }
+
+        $profile = $result->getObject();
+        $profileView = new ProfileViewModel($profile->getName(), $profile->getPhone(), $profile->getEmail(), $profile->getActive());
+
+        return $this->renderWithMenu('register/details.html.twig', ["profile" => $profileView, "user" => $user]);
+    }
+
+    /**
+     * @Route("/confirm-user", name="update-user", methods="POST")
+     */
+    public function updateAction(Request $request) {
+        $userName = $_POST['user'];
+        $status = $_POST['activate'];
+
+        $result = $this->service->updateUserStatus($userName, $status);
 
         if ($result->hasErrors()) {
             return $this->renderError($result->getErrors());

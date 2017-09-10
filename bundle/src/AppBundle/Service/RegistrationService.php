@@ -44,6 +44,7 @@ class RegistrationService extends BaseService
             $user = $this->userDao->findByUserName($model->user);
 
             if (isset($user)) {
+                $this->logger->error("user already exists: ", [$user]);
                 return $this->returnError("user: " . $user->getUser() . " already exists");
             }
 
@@ -69,7 +70,6 @@ class RegistrationService extends BaseService
             return $this->returnValue($user);
         } catch (Exception $ex) {
             $this->logger->error("can't register user: ", $ex);
-            $this->addError($ex->getMessage());
             return $this->returnError($ex->getMessage());
         }
     }
@@ -82,9 +82,9 @@ class RegistrationService extends BaseService
                 return $this->returnError("user profile " . $userName . " not found");
             }
 
-            if ($profile->getActive() == 1) {
-                return $this->returnError("profile is already active");
-            }
+//            if ($profile->getActive() == 1) {
+//                return $this->returnError("profile is already active");
+//            }
 
             return $this->returnValue($profile);
         } catch (\Exception $ex) {
@@ -93,7 +93,7 @@ class RegistrationService extends BaseService
         }
     }
 
-    public function activateUser($userName) : Result {
+    public function updateUserStatus($userName, $status) : Result {
         try {
             $user = $this->userDao->findByUserName($userName);
 
@@ -107,11 +107,11 @@ class RegistrationService extends BaseService
                 return $this->returnError("user profile " . $userName . " not found");
             }
 
-            if ($profile->getActive() == 1) {
-                return $this->returnError("user is already active");
-            }
+//            if ($profile->getActive() == 1) {
+//                return $this->returnError("user is already active");
+//            }
 
-            $this->profileDao->activateProfile($profile);
+            $this->profileDao->updateProfileStatus($profile, $status);
 
             return $this->returnValue($profile);
 
@@ -121,18 +121,16 @@ class RegistrationService extends BaseService
         }
     }
 
-    public function getUserList() : Result {
+    public function getAccountList() : Result {
         try {
+            $this->logger->info('getting account assigned');
             $profiles = $this->accountDao->findAccountsWithProfile();
+            $this->logger->info('profiles: ', [$profiles]);
 
             return $this->returnValue($profiles);
         } catch (\Exception $ex) {
             $this->logger->error("can't get user list: ", [$ex]);
             return $this->returnError("can't get user list: " . $ex->getMessage());
         }
-    }
-
-    private function addError($error) {
-        $this->errors[] = $error;
     }
 }

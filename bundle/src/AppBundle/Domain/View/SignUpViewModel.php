@@ -56,11 +56,11 @@ class SignUpViewModel
     public $confirmPassword;
 
 
-    /**
-     *  @Assert\IsTrue(message = "The passwords doesn't match")
-     */
-    public function isValidPassword() {
-        return $this->password == $this->confirmPassword;
-    }
+//    /**
+//     *  @Assert\IsTrue(message = "The passwords doesn't match")
+//     */
+//    public function isValidPassword() {
+//        return $this->password == $this->confirmPassword;
+//    }
 
 }

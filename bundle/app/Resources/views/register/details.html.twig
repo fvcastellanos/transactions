@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
+        <a class="breadcrumb-item active" href="#">Sign Up</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>User Details</h1>
+                <form action="{{ path('update-user') }}" method="post">
+                    <input type="hidden" value="{{ user }}" name="user"/>
+                    <table class="table">
+                        <tr>
+                            <td>Name</td>
+                            <td>{{ profile.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>{{ profile.phone }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{ profile.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>
+                                <select name="activate" class="form-control">
+                                    <option value="1" {{ profile.active==1?'selected' }}>Active</option>
+                                    <option value="0" {{ profile.active==0?'selected' }}>Inactive</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="submit" class="btn btn-primary" value="Update" />
+                    <a href="{{ path('list-users') }}" class="btn btn-success">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

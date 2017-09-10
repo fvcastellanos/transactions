@@ -47,7 +47,8 @@ class AccountDao extends BaseDao
 
     public function findAccountsWithProfile() {
         return $this->repository->getRepository(Account::class)
-            ->findBy(['profile' => 'not null']);
+//            ->findBy(['profile' => 'not null']);
+        ->findAll();
     }
 
 }

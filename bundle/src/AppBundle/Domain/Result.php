@@ -42,7 +42,7 @@ class Result
     }
 
     public function hasErrors() {
-        return isset($errors);
+        return isset($this->errors);
     }
 
     public function isSuccess() {

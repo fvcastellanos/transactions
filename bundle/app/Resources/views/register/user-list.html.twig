@@ -11,22 +11,33 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h1>Users list</h1>
+                <h1>User list</h1>
                 <table class="table">
-{#
-                    <tr>
-                        <td>Name</td>
-                        <td>{{ profile.name }}</td>
-                    </tr>
-                    <tr>
-                        <td>Phone</td>
-                        <td>{{ profile.phone }}</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>{{ profile.email }}</td>
-                    </tr>
-#}
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Name</th>
+                            <th>Account</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for account in accounts %}
+                            <tr>
+                                <td>{{ account.profile.user.user }}</td>
+                                <td>{{ account.profile.name }}</td>
+                                <td>{{ account.number }}</td>
+                                {% if account.profile.active == 0 %}
+                                    <td>Inactive</td>
+                                {% else %}
+                                    <td>Active</td>
+                                {% endif %}
+                                <td><a href="{{ path('confirm-user', { user: account.profile.user.user}) }}" class="btn btn-primary">Details</a> </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
                 </table>
                 <a href="{{ path('homepage') }}" class="btn btn-success">Home</a>
             </div>

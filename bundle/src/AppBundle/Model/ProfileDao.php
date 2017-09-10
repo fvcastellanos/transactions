@@ -38,8 +38,8 @@ class ProfileDao extends BaseDao
         return $profile;
     }
 
-    public function activateProfile(Profile $profile) {
-        $profile->setActive(1);
+    public function updateProfileStatus(Profile $profile, $status) {
+        $profile->setActive($status);
 
         $this->entityManager->merge($profile);
         $this->entityManager->flush();

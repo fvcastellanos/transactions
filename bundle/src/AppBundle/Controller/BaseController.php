@@ -16,7 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class BaseController extends Controller
 {
     protected $loginService;
-    protected $errors;
 
     /**
      * BaseController constructor.
@@ -68,11 +67,11 @@ class BaseController extends Controller
     }
 
     protected function renderValidationErrors($view, $form, $validationErrors) {
-        $this->renderWithMenu($view, [ "form" => $form, "errors" => $validationErrors]);
+        return $this->renderWithMenu($view, [ "form" => $form, "errors" => $validationErrors]);
     }
 
     protected function renderAppErrors($view, $form, $errors) {
-        $this->renderWithMenu($view, [ "form" => $form, "app_errors" => $errors]);
+        return $this->renderWithMenu($view, [ "form" => $form->createView(), "app_errors" => $errors]);
     }
 
     protected function validateFormModel($model) {
@@ -85,7 +84,7 @@ class BaseController extends Controller
     }
 
     protected function renderError($error) {
-        $this->renderWithMenu("error.html.twig", ['error' => $error]);
+        return $this->renderWithMenu("error.html.twig", ['error' => $error]);
     }
 
 }
