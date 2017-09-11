@@ -47,14 +47,24 @@ class LoginService extends BaseService
             return $this->returnError(LoginService::$defaultError);
         }
 
+        $profile = $this->profileDao->findProfileByUserName($userName);
+
+        if (!isset($profile)) {
+            $this->logger->error("profile not found for user: ", [$userName]);
+            return $this->returnError(LoginService::$defaultError);
+        }
+
+        if (!$profile->getActive()) {
+            $this->logger->error("profile it not active for user: ", [$userName]);
+            return $this->returnError(LoginService::$defaultError);
+        }
+
         if ($user->getPassword() != $convertedPassword) {
             $this->logger->error("invalid password for user: ",  [ $userName ]);
             return $this->returnError(LoginService::$defaultError);
         }
 
         $this->logger->info("user authenticated: ", [ $userName ]);
-
-        $profile = $this->profileDao->findProfileByUserName($userName);
 
         $loggedUser = new LoggedUser();
         $loggedUser->user = $user->getUser();
@@ -86,7 +96,7 @@ class LoginService extends BaseService
                 $this->logger->info("pulling admin options for user: ", [ $userName ]);
                 $options = array_merge($options, [
 //                    ["name" => "Accounts", "route" => "accounts"],
-                    ["name" => "Users", "route" => "profile_show"],
+                    ["name" => "Users", "route" => "list-users"],
 //                    ["name" => "Deposit", "route" => "deposit-inquiry"],
                 ]);
             }
