@@ -2,8 +2,8 @@
 
 {% block breadcrumb %}
     <nav class="breadcrumb">
-        <a class="breadcrumb-item" href="/">Home</a>
-        <a class="breadcrumb-item active" href="/sign-up">Sign Up</a>
+        <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('register') }}">Sign Up</a>
     </nav>
 {% endblock %}
 

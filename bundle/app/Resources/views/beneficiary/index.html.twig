@@ -1,45 +1,60 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
+        <a class="breadcrumb-item active" href="{{ path('beneficiaries') }}">Beneficiaries</a>
+    </nav>
+{% endblock %}
 
 {% block body %}
-    <h1>Beneficiaries list</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Beneficiaries</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Alias</th>
-                <th>Maxamounttransfer</th>
-                <th>Transactionsquota</th>
-                <th>Created</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for beneficiary in beneficiaries %}
-            <tr>
-                <td><a href="{{ path('beneficiary_show', { 'id': beneficiary.id }) }}">{{ beneficiary.id }}</a></td>
-                <td>{{ beneficiary.alias }}</td>
-                <td>{{ beneficiary.maxAmountTransfer }}</td>
-                <td>{{ beneficiary.transactionsQuota }}</td>
-                <td>{% if beneficiary.created %}{{ beneficiary.created|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Alias</th>
+                            <th>Maxamounttransfer</th>
+                            <th>Transactionsquota</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for beneficiary in beneficiaries %}
+                            <tr>
+                                <td><a href="{{ path('show-beneficiary', { 'id': beneficiary.id }) }}">{{ beneficiary.id }}</a></td>
+                                <td>{{ beneficiary.alias }}</td>
+                                <td>{{ beneficiary.maxAmountTransfer }}</td>
+                                <td>{{ beneficiary.transactionsQuota }}</td>
+                                <td>{% if beneficiary.created %}{{ beneficiary.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                <td>
+                                    <ul>
+                                        <li>
+                                            <a href="{{ path('show-beneficiary', { 'id': beneficiary.id }) }}">show</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ path('edit-beneficiary', { 'id': beneficiary.id }) }}">edit</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
                     <ul>
                         <li>
-                            <a href="{{ path('beneficiary_show', { 'id': beneficiary.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('beneficiary_edit', { 'id': beneficiary.id }) }}">edit</a>
+                            <a href="{{ path('new-beneficiary') }}">Create a new beneficiary</a>
                         </li>
                     </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('beneficiary_new') }}">Create a new beneficiary</a>
-        </li>
-    </ul>
+            </div>
+        </div>
+
+    </div>
 {% endblock %}

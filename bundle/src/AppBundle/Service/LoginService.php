@@ -105,7 +105,7 @@ class LoginService extends BaseService
             if ($role->getName() == 'USER') {
                 $this->logger->info("pulling user options for user: ", [ $userName ]);
                 $options = array_merge($options, [
-//                    ["name" => "Beneficiaries", "route" => "beneficiaries"],
+                    ["name" => "Beneficiaries", "route" => "beneficiaries"],
 //                    ["name" => "Transfers", "route" => "transfers"],
 //                    ["name" => "Deposit", "route" => "deposit"],
 //                    ["name" => "Transactions", "route" => "transactions"],

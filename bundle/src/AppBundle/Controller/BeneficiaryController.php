@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Beneficiary;
+use AppBundle\Service\LoginService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
@@ -14,10 +15,15 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class BeneficiaryController extends BaseController
 {
+    public function __construct(LoginService $loginService)
+    {
+        parent::__construct($loginService);
+    }
+
     /**
      * Lists all beneficiary entities.
      *
-     * @Route("/", name="beneficiary_index")
+     * @Route("/", name="beneficiaries")
      * @Method("GET")
      */
     public function indexAction()
@@ -26,7 +32,7 @@ class BeneficiaryController extends BaseController
 
         $beneficiaries = $em->getRepository('AppBundle:Beneficiary')->findAll();
 
-        return $this->render('beneficiary/index.html.twig', array(
+        return $this->renderWithMenu('beneficiary/index.html.twig', array(
             'beneficiaries' => $beneficiaries,
         ));
     }
@@ -34,7 +40,7 @@ class BeneficiaryController extends BaseController
     /**
      * Creates a new beneficiary entity.
      *
-     * @Route("/new", name="beneficiary_new")
+     * @Route("/new", name="new-beneficiary")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -60,7 +66,7 @@ class BeneficiaryController extends BaseController
     /**
      * Finds and displays a beneficiary entity.
      *
-     * @Route("/{id}", name="beneficiary_show")
+     * @Route("/{id}", name="show-beneficiary")
      * @Method("GET")
      */
     public function showAction(Beneficiary $beneficiary)
@@ -76,7 +82,7 @@ class BeneficiaryController extends BaseController
     /**
      * Displays a form to edit an existing beneficiary entity.
      *
-     * @Route("/{id}/edit", name="beneficiary_edit")
+     * @Route("/{id}/edit", name="edit-beneficiary")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Beneficiary $beneficiary)
@@ -101,7 +107,7 @@ class BeneficiaryController extends BaseController
     /**
      * Deletes a beneficiary entity.
      *
-     * @Route("/{id}", name="beneficiary_delete")
+     * @Route("/{id}", name="delete-beneficiary")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Beneficiary $beneficiary)
@@ -128,7 +134,7 @@ class BeneficiaryController extends BaseController
     private function createDeleteForm(Beneficiary $beneficiary)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('beneficiary_delete', array('id' => $beneficiary->getId())))
+            ->setAction($this->generateUrl('delete-beneficiary', array('id' => $beneficiary->getId())))
             ->setMethod('DELETE')
             ->getForm()
         ;
