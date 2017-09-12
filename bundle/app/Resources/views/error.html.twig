@@ -15,7 +15,9 @@
                     Application Error
                 </h1>
                 <div class="alert-danger">
-                    {{ error }}
+                    {% for e in error  %}
+                        <p>{{ e }}</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>

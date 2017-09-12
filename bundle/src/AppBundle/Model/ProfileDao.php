@@ -23,7 +23,7 @@ class ProfileDao extends BaseDao
         parent::__construct($registry);
     }
 
-    public function createUserProfile($name, $phone, $email, User $user) {
+    public function createUserProfile($name, $phone, $email, User $user) : Profile {
         $profile = new Profile();
 
         $profile->setName($name);
@@ -38,8 +38,8 @@ class ProfileDao extends BaseDao
         return $profile;
     }
 
-    public function activateProfile(Profile $profile) {
-        $profile->setActive(1);
+    public function updateProfileStatus(Profile $profile, $status) {
+        $profile->setActive($status);
 
         $this->entityManager->merge($profile);
         $this->entityManager->flush();

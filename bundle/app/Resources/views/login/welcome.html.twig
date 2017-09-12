@@ -1,0 +1,18 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Welcome {{ user.name }}!</h1>
+                <p>Resistance is futile!</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

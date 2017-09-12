@@ -14,6 +14,7 @@ class ProfileViewModel
     public $name;
     public $phone;
     public $email;
+    public $active;
 
     /**
      * ProfileViewModel constructor.
@@ -21,11 +22,12 @@ class ProfileViewModel
      * @param $phone
      * @param $email
      */
-    public function __construct($name, $phone, $email)
+    public function __construct($name, $phone, $email, $active)
     {
         $this->name = $name;
         $this->phone = $phone;
         $this->email = $email;
+        $this->active = $active;
     }
 
 

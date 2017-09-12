@@ -38,11 +38,11 @@ class Result
      */
     public function getErrors()
     {
-        return $this->errors;
+        return array($this->errors);
     }
 
     public function hasErrors() {
-        return isset($errors);
+        return isset($this->errors);
     }
 
     public function isSuccess() {

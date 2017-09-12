@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,14 +44,14 @@ class Beneficiary
     private $transactionsQuota;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created = 'CURRENT_TIMESTAMP';
+    private $created;
 
     /**
-     * @var \Account
+     * @var Account
      *
      * @ORM\ManyToOne(targetEntity="Account")
      * @ORM\JoinColumns({
@@ -58,6 +59,102 @@ class Beneficiary
      * })
      */
     private $account;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAlias()
+    {
+        return $this->alias;
+    }
+
+    /**
+     * @param string $alias
+     */
+    public function setAlias(string $alias)
+    {
+        $this->alias = $alias;
+    }
+
+    /**
+     * @return float
+     */
+    public function getMaxAmountTransfer()
+    {
+        return $this->maxAmountTransfer;
+    }
+
+    /**
+     * @param float $maxAmountTransfer
+     */
+    public function setMaxAmountTransfer(float $maxAmountTransfer)
+    {
+        $this->maxAmountTransfer = $maxAmountTransfer;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTransactionsQuota()
+    {
+        return $this->transactionsQuota;
+    }
+
+    /**
+     * @param int $transactionsQuota
+     */
+    public function setTransactionsQuota(int $transactionsQuota)
+    {
+        $this->transactionsQuota = $transactionsQuota;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    /**
+     * @param DateTime $created
+     */
+    public function setCreated(DateTime $created)
+    {
+        $this->created = $created;
+    }
+
+    /**
+     * @return Account
+     */
+    public function getAccount() : Account
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param Account $account
+     */
+    public function setAccount(Account $account)
+    {
+        $this->account = $account;
+    }
 
 
 }

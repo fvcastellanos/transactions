@@ -14,6 +14,12 @@ class SignUpViewModel
 {
     /**
      * @Assert\NotBlank()
+     * @Assert\Length(min = 10, max = 100)
+     */
+    public $account;
+
+    /**
+     * @Assert\NotBlank()
      * @Assert\Length(min = 10, max = 150)
      */
     public $name;
@@ -39,22 +45,22 @@ class SignUpViewModel
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min = 6, max = 100)
+     * @Assert\Length(min = 6, max = 50)
      */
     public $password;
 
     /**
      * @Assert\NotBlank()
-     * @Assert\Length(min = 6, max = 100)
+     * @Assert\Length(min = 6, max = 50)
      */
     public $confirmPassword;
 
 
-    /**
-     *  @Assert\IsTrue(message = "The passwords doesn't match")
-     */
-    public function isValidPassword() {
-        return $this->password == $this->confirmPassword;
-    }
+//    /**
+//     *  @Assert\IsTrue(message = "The passwords doesn't match")
+//     */
+//    public function isValidPassword() {
+//        return $this->password == $this->confirmPassword;
+//    }
 
 }

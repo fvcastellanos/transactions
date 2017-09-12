@@ -13,7 +13,7 @@
             <div class="col-md-12">
                 <h1>Activate User</h1>
                 <p>
-                    Welcome!, please review your information and activate your account:
+                    Welcome {{ profile.name }}!, we'll review your information and activate your account:
                 </p>
                 <table class="table">
                     <tr>
@@ -29,10 +29,13 @@
                         <td>{{ profile.email }}</td>
                     </tr>
                 </table>
+                <a href="{{ path('homepage') }}" class="btn btn-success">Home</a>
+{#
                 <form action="/activate-user" method="post">
                     <input type="hidden" value="{{ user }}" name="user"/>
                     <input type="submit" class="btn btn-primary" value="Activate" />
                 </form>
+#}
             </div>
         </div>
     </div>
