@@ -91,6 +91,7 @@ class LoginService extends BaseService
         $options = array();
 
         $this->logger->info("information found for user: ", [ $userName ]);
+
         foreach ($roles as  $role) {
             if ($role->getName() == 'ADMIN') {
                 $this->logger->info("pulling admin options for user: ", [ $userName ]);

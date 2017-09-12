@@ -37,7 +37,7 @@ class BaseController extends Controller
     }
 
     protected function isUserLogged() {
-        if (isset($loggedUser->user)) {
+        if (isset($this->getLoggedUser()->user)) {
             return true;
         }
 
