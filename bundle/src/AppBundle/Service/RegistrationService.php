@@ -82,10 +82,6 @@ class RegistrationService extends BaseService
                 return $this->returnError("user profile " . $userName . " not found");
             }
 
-//            if ($profile->getActive() == 1) {
-//                return $this->returnError("profile is already active");
-//            }
-
             return $this->returnValue($profile);
         } catch (\Exception $ex) {
             $this->logger->error("can't get profile", $ex);
@@ -106,10 +102,6 @@ class RegistrationService extends BaseService
             if (!isset($profile)) {
                 return $this->returnError("user profile " . $userName . " not found");
             }
-
-//            if ($profile->getActive() == 1) {
-//                return $this->returnError("user is already active");
-//            }
 
             $this->profileDao->updateProfileStatus($profile, $status);
 

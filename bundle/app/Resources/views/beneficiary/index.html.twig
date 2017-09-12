@@ -18,9 +18,8 @@
                         <tr>
                             <th>Id</th>
                             <th>Alias</th>
-                            <th>Maxamounttransfer</th>
-                            <th>Transactionsquota</th>
-                            <th>Created</th>
+                            <th>Max Amount</th>
+                            <th>Quota</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -31,7 +30,6 @@
                                 <td>{{ beneficiary.alias }}</td>
                                 <td>{{ beneficiary.maxAmountTransfer }}</td>
                                 <td>{{ beneficiary.transactionsQuota }}</td>
-                                <td>{% if beneficiary.created %}{{ beneficiary.created|date('Y-m-d H:i:s') }}{% endif %}</td>
                                 <td>
                                     <ul>
                                         <li>
@@ -47,12 +45,7 @@
                         </tbody>
                     </table>
 
-                    <ul>
-                        <li>
-                            <a href="{{ path('new-beneficiary') }}">Create a new beneficiary</a>
-                        </li>
-                    </ul>
-
+                    <a href="{{ path('new-beneficiary') }}" class="btn btn-primary">Create</a>
             </div>
         </div>
 

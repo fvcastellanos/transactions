@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Beneficiary;
+use AppBundle\Service\BeneficiaryService;
 use AppBundle\Service\LoginService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -15,9 +16,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component
  */
 class BeneficiaryController extends BaseController
 {
-    public function __construct(LoginService $loginService)
+    private $service;
+
+    public function __construct(LoginService $loginService,
+                                BeneficiaryService $service)
     {
         parent::__construct($loginService);
+        $this->service = $service;
     }
 
     /**
@@ -28,9 +33,15 @@ class BeneficiaryController extends BaseController
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        $profileId = $this->getLoggedUser()->profileId;
 
-        $beneficiaries = $em->getRepository('AppBundle:Beneficiary')->findAll();
+        $result = $this->service->getBeneficiariesFor($profileId);
+
+        if ($result->hasErrors()) {
+            return $this->renderError($result->getErrors());
+        }
+
+        $beneficiaries = $result->getObject();
 
         return $this->renderWithMenu('beneficiary/index.html.twig', array(
             'beneficiaries' => $beneficiaries,
@@ -54,7 +65,7 @@ class BeneficiaryController extends BaseController
             $em->persist($beneficiary);
             $em->flush();
 
-            return $this->redirectToRoute('beneficiary_show', array('id' => $beneficiary->getId()));
+            return $this->redirectToRoute('beneficiaries', array('id' => $beneficiary->getId()));
         }
 
         return $this->render('beneficiary/new.html.twig', array(
