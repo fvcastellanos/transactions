@@ -1,2 +1,4 @@
-# transactions
-Simple PHP projects to emulate a basic Bank portal with creation of accounts and money transfer among accounts
+bundle
+======
+
+A Symfony project created on September 3, 2017, 7:40 am.
