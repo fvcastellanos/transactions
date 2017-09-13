@@ -116,10 +116,10 @@ class RegistrationService extends BaseService
     public function getAccountList() : Result {
         try {
             $this->logger->info('getting account assigned');
-            $profiles = $this->accountDao->findAccountsWithProfile();
-            $this->logger->info('profiles: ', [$profiles]);
+            $accounts = $this->accountDao->findAccountsWithProfile();
+            $this->logger->info('accounts: ', [$accounts]);
 
-            return $this->returnValue($profiles);
+            return $this->returnValue($accounts);
         } catch (\Exception $ex) {
             $this->logger->error("can't get user list: ", [$ex]);
             return $this->returnError("can't get user list: " . $ex->getMessage());

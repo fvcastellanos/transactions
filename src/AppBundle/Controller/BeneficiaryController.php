@@ -2,12 +2,17 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Domain\View\BeneficiaryViewModel;
 use AppBundle\Entity\Beneficiary;
 use AppBundle\Service\BeneficiaryService;
 use AppBundle\Service\LoginService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Beneficiary controller.
@@ -56,22 +61,25 @@ class BeneficiaryController extends BaseController
      */
     public function newAction(Request $request)
     {
-        $beneficiary = new Beneficiary();
-        $form = $this->createForm('AppBundle\Form\BeneficiaryType', $beneficiary);
+        $stepI = new BeneficiaryViewModel();
+        $form = $this->buildNewBeneficiaryStepI($stepI);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($beneficiary);
-            $em->flush();
+            $profileId = $this->getLoggedUser()->profileId;
+            $result = $this->service->addBeneficiary($stepI, $profileId);
 
-            return $this->redirectToRoute('beneficiaries', array('id' => $beneficiary->getId()));
+            if ($result->hasErrors()) {
+                return $this->renderAppErrors('beneficiary/new.html.twig', $form, $result->getErrors());
+            }
+
+            return $this->redirectToRoute("beneficiaries");
         }
 
-        return $this->render('beneficiary/new.html.twig', array(
-            'beneficiary' => $beneficiary,
-            'form' => $form->createView(),
-        ));
+        return $this->renderWithMenu('beneficiary/new.html.twig', array(
+            'stepI' => $stepI,
+            'form' => $form->createView()));
     }
 
     /**
@@ -150,4 +158,16 @@ class BeneficiaryController extends BaseController
             ->getForm()
         ;
     }
+
+    private function buildNewBeneficiaryStepI($model) {
+
+        return $this->createFormBuilder($model)
+            ->add('account', TextType::class)
+            ->add('alias', TextType::class)
+            ->add('maxAmount', NumberType::class)
+            ->add('transferQuota', NumberType::class)
+            ->add('check', SubmitType::class, ['label' => 'Check account'])
+            ->getForm();
+    }
+
 }

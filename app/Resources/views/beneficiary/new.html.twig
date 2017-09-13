@@ -12,9 +12,36 @@
     <h1>Add Beneficiary</h1>
 
     {{ form_start(form) }}
-        {#{{ form_widget(form) }}#}
-        <input type="submit" value="Create" />
+        <div class="form-group">
+            {{ form_label(form.account) }}
+            {{ form_widget(form.account, { 'attr' : { 'class' : 'form-control' }}) }}
+            {{ form_errors(form.account) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.alias) }}
+            {{ form_widget(form.alias, { 'attr' : { 'class' : 'form-control' }}) }}
+            {{ form_errors(form.alias) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.maxAmount) }}
+            {{ form_widget(form.maxAmount, { 'attr' : { 'class' : 'form-control' }}) }}
+            {{ form_errors(form.maxAmount) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.transferQuota) }}
+            {{ form_widget(form.transferQuota, { 'attr' : { 'class' : 'form-control' }}) }}
+            {{ form_errors(form.transferQuota) }}
+        </div>
+        {{ form_row(form.check, { 'attr' : { 'class' : 'btn btn-primary' }}) }}
     {{ form_end(form) }}
+
+    {% if app_errors is defined %}
+        <ul>
+            {% for error in app_errors %}
+                <li class="error-list">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     <ul>
         <li>

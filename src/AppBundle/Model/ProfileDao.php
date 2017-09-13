@@ -8,19 +8,21 @@
 
 namespace AppBundle\Model;
 
+use DB;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use AppBundle\Entity\Profile;
 use AppBundle\Entity\User;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ProfileDao extends BaseDao
+class ProfileDao extends BaseDBDao
 {
 
-   /**
-     * ProfileDao constructor.
-     */
-    public function __construct(Registry $registry)
+    public function __construct(ContainerInterface $container,
+                                LoggerInterface $logger,
+                                Registry $registry)
     {
-        parent::__construct($registry);
+        parent::__construct($container, $logger, $registry);
     }
 
     public function createUserProfile($name, $phone, $email, User $user) : Profile {
@@ -57,5 +59,20 @@ class ProfileDao extends BaseDao
             ->findOneBy(["user" => $user]);
 
         return $profile;
+    }
+
+    public function getProfile($profileId) {
+        try {
+            $row = DB::queryFirstRow("select * from profile where id = %i", $profileId);
+
+            if (isset($row)) {
+                return new \AppBundle\Domain\Profile($row['id'], $row['user_id'], $row['name'],
+                    $row['email'], $row['phone'], $row['active']);
+            }
+
+            return null;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 }

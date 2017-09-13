@@ -10,13 +10,19 @@ namespace AppBundle\Model;
 
 use AppBundle\Entity\Account;
 use AppBundle\Entity\Profile;
+use DB;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class AccountDao extends BaseDao
+class AccountDao extends BaseDBDao
 {
-    public function __construct(Registry $registry)
+
+    public function __construct(ContainerInterface $container,
+                                LoggerInterface $logger,
+                                Registry $registry)
     {
-        parent::__construct($registry);
+        parent::__construct($container, $logger, $registry);
     }
 
     public function createAccount($accountNumber, $currency, Profile $profile) : Account {
@@ -46,9 +52,34 @@ class AccountDao extends BaseDao
     }
 
     public function findAccountsWithProfile() {
-        return $this->repository->getRepository(Account::class)
-//            ->findBy(['profile' => 'not null']);
-        ->findAll();
+        try {
+            $row = DB::queryAllLists("select * from account where profile_id is not null");
+
+            if (isset($row)) {
+                return new \AppBundle\Domain\Account($row['id'], $row['profile_id'], $row['number'], $row['currency']);
+            }
+
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+
+//        return $this->repository->getRepository(Account::class)
+//        ->findAll();
+    }
+
+    public function getAccount($accountNumber) {
+        try {
+            $row = DB::queryFirstRow("select * from account where number = %s", $accountNumber);
+
+            if (isset($row)) {
+                return new \AppBundle\Domain\Account($row['id'], $row['profile_id'], $row['number'], $row['currency']);
+            }
+
+            return null;
+
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
 }
