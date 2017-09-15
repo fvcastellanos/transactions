@@ -56,7 +56,7 @@ class BaseDBDao extends BaseDao
 
     protected function getLastInsertedId() {
         try {
-            return DB::queryFirstField("select LAST_INSERT_ID");
+            return DB::queryFirstField("select LAST_INSERT_ID()");
         } catch (Exception $ex) {
             throw $ex;
         }
