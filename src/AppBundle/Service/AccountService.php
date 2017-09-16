@@ -49,7 +49,7 @@ class AccountService extends BaseService
 
     public function createAccount($number, $balance) : Result {
         try {
-            $account = $this->accountDao->findByAccountNumber($number);
+            $account = $this->accountDao->getAccount($number);
 
             if (isset($account)) {
                 return $this->returnError("account already exists");

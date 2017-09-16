@@ -2,45 +2,69 @@
 
 namespace AppBundle\Model;
 
+use AppBundle\Domain\User;
 use AppBundle\Service\ShaUtils;
+use DB;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use AppBundle\Entity\User;
-use AppBundle\Entity\Role;
-use Doctrine\Common\Collections\ArrayCollection;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class UserDao extends BaseDao
+class UserDao extends BaseDBDao
 {
-    /**
-     * UserDao constructor.
-     */
-    public function __construct(Registry $registry) {
-        parent::__construct($registry);
+    private $logger;
+
+    public function __construct(ContainerInterface $container,
+                                LoggerInterface $logger,
+                                Registry $registry)
+    {
+        parent::__construct($container, $logger, $registry);
+        $this->logger = $logger;
     }
 
     public function findByUserName($userName) {
-        return $this->repository
-            ->getRepository(User::class)
-            ->findOneBy(['user' => $userName]);
+        try {
+            $row = DB::queryFirstRow("select * from user where user = %s", $userName);
+
+            if (isset($row)) {
+                return new User($row['id'], $row['user'], $row['password'], $row['role']);
+            }
+
+            return null;
+
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
-    public function createUser($userName, $password, Role $role) {
+    public function get($id) {
+        try {
+            $row = DB::queryFirstRow("select * from user where id = %i", $id);
 
-        $newPassword = ShaUtils::sha512($password);
+            if (isset($row)) {
+                return new User($row['id'], $row['user'], $row['password'], $row['role']);
+            }
 
-        $user = new User();
+            return null;
 
-        $user->setUser($userName);
-        $user->setPassword($newPassword);
-        $user->setRole(new ArrayCollection([ $role ]));
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
 
-        $role->setUser(new ArrayCollection([ $user]));
+    public function newUser($userName, $password, $role) {
+        try {
 
-        $em = $this->repository->getManager();
+            $convertedPassword = ShaUtils::sha512($password);
 
-        $em->persist($user);
-        $em->persist($role);
-        $em->flush();
+            DB::insert('user', array(
+                'user' => $userName,
+                'password' => $convertedPassword,
+                'role' => $role
+            ));
 
-        return $user;
+            return $this->getLastInsertedId();
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 }

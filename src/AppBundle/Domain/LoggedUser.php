@@ -15,5 +15,5 @@ class LoggedUser
     public $profileId;
     public $name;
     public $email;
-    public $roles;
+    public $role;
 }

@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
+{% import 'macros.html.twig' as utils %}
+
 {% block breadcrumb %}
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
@@ -52,7 +54,7 @@
                 {{ form_end(form) }}
 
                 {% if app_errors is defined %}
-                    {{ utils.appErrors(app_errors) }}
+                    {{ utils.showApplicationErrors(app_errors) }}
                 {% endif %}
             </div>
         </div>

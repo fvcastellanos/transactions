@@ -14,6 +14,11 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Account controller.
+ *
+ * @Route("sign-up")
+ */
 class RegisterController extends BaseController
 {
 
@@ -37,7 +42,7 @@ class RegisterController extends BaseController
     }
 
     /**
-     * @Route("/sign-up", name="register")
+     * @Route("/", name="register")
      */
     public function signUpAction(Request $request) {
         $model = new SignUpViewModel();
@@ -68,7 +73,7 @@ class RegisterController extends BaseController
                 return $this->renderAppErrors($this->signUpView, $form, $result->getErrors());
             }
 
-            $userName = $result->getObject()->getUser();
+            $userName = $result->getObject()->user;
             return $this->redirectToRoute("activate-user", [ "user" => $userName ]);
         }
 
@@ -76,20 +81,20 @@ class RegisterController extends BaseController
     }
 
     /**
-     * @Route("/list-users", name="list-users", methods="GET")
+     * @Route("/users", name="list-users", methods="GET")
      */
     public function listUsers() {
         $result = $this->service->getAccountList();
 
         if ($result->hasErrors()) {
-            return $this->render('error.html.twig', ['error' => $result->getErrors()]);
+            return $this->renderError($result->getErrors());
         }
 
         return $this->renderWithMenu("register/user-list.html.twig", ['accounts' => $result->getObject()]);
     }
 
     /**
-     * @Route("/activate-user/{user}", name="activate-user", methods="GET")
+     * @Route("/activate/{user}", name="activate-user", methods="GET")
      */
     public function activateAction($user) {
         $result = $this->service->getProfileByUserName($user);
@@ -99,13 +104,13 @@ class RegisterController extends BaseController
         }
 
         $profile = $result->getObject();
-        $profileView = new ProfileViewModel($profile->getName(), $profile->getPhone(), $profile->getEmail(), $profile->getActive());
+        $profileView = new ProfileViewModel($profile->name, $profile->phone, $profile->email, $profile->active);
 
         return $this->renderWithMenu($this->activateView, ["profile" => $profileView, "user" => $user]);
     }
 
     /**
-     * @Route("/confirm-user/{user}", name="confirm-user", methods="GET")
+     * @Route("/confirm/{user}", name="confirm-user", methods="GET")
      */
     public function confirmAction($user) {
         $result = $this->service->getProfileByUserName($user);
@@ -115,13 +120,13 @@ class RegisterController extends BaseController
         }
 
         $profile = $result->getObject();
-        $profileView = new ProfileViewModel($profile->getName(), $profile->getPhone(), $profile->getEmail(), $profile->getActive());
+        $profileView = new ProfileViewModel($profile->name, $profile->phone, $profile->email, $profile->active);
 
         return $this->renderWithMenu('register/details.html.twig', ["profile" => $profileView, "user" => $user]);
     }
 
     /**
-     * @Route("/confirm-user", name="update-user", methods="POST")
+     * @Route("/confirm", name="update-user", methods="POST")
      */
     public function updateAction(Request $request) {
         $userName = $_POST['user'];
@@ -133,8 +138,7 @@ class RegisterController extends BaseController
             return $this->renderError($result->getErrors());
         }
 
-        return $this->redirectToRoute("homepage");
-
+        return $this->redirectToRoute("list-users");
     }
 
     private function buildSingUpForm($model) {
@@ -149,11 +153,5 @@ class RegisterController extends BaseController
             ->add('confirmPassword', PasswordType::class)
             ->add('create', SubmitType::class, ['label' => 'Sign Up'])
             ->getForm();
-    }
-
-    private function buildActivateForm($model) {
-        $this->createFormBuilder()
-            ->add('name', TextType::class, ['enabled' => false])
-            ->add('activate', SubmitType::class, ['label' => 'Activate']);
     }
 }

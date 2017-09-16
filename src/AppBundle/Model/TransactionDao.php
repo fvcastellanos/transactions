@@ -28,22 +28,10 @@ class TransactionDao extends BaseDBDao
         $this->logger = $logger;
     }
 
-    public function getTransactionTypeByName($typeName) {
-        $result = DB::queryFirstRow("select * from transaction_type where name = %s", $typeName);
-
-        if (isset($result)) {
-            return new TransactionType($result['id'], $result['name'], $result['description']);
-        }
-
-        return null;
-    }
-
     public function createCreditTransaction(TransactionTypeEnum $typeEnum, $accountId, $description, $currency, $amount) {
         try {
-            $type = $this->getTransactionTypeByName($typeEnum->value);
-
             DB::insert('transaction', array(
-                'transaction_type_id' => $type->id,
+                'transaction_type' => $typeEnum->value,
                 'account_id' => $accountId,
                 'credit' => 1,
                 'description' => $description,

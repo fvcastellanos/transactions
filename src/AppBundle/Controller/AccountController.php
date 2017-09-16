@@ -62,7 +62,7 @@ class AccountController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $result = $this->service->createAccount($model->number, $model->balance);
+            $result = $this->service->createAccount($model->account, $model->balance);
 
             if ($result->hasErrors()) {
                 return $this->renderAppErrors('account/new.html.twig', $form, $result->getErrors());
@@ -77,7 +77,7 @@ class AccountController extends BaseController
     private function buildNewAccountForm($model) {
 
         return $this->createFormBuilder($model)
-            ->add('number', TextType::class)
+            ->add('account', TextType::class)
             ->add('balance', NumberType::class)
             ->add('create', SubmitType::class, ['label' => 'Create'])
             ->getForm();

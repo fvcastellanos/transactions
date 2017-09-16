@@ -8,7 +8,13 @@
 
 namespace AppBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+/**
+ * Deposit controller.
+ *
+ * @Route("deposit")
+ */
 class DepositController extends BaseController
 {
 

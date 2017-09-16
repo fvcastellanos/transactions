@@ -25,15 +25,15 @@
                     <tbody>
                         {% for account in accounts %}
                             <tr>
-                                <td>{{ account.profile.user.user }}</td>
-                                <td>{{ account.profile.name }}</td>
-                                <td>{{ account.number }}</td>
-                                {% if account.profile.active == 0 %}
+                                <td>{{ account.user }}</td>
+                                <td>{{ account.name }}</td>
+                                <td>{{ account.account }}</td>
+                                {% if account.active == 0 %}
                                     <td>Inactive</td>
                                 {% else %}
                                     <td>Active</td>
                                 {% endif %}
-                                <td><a href="{{ path('confirm-user', { user: account.profile.user.user}) }}" class="btn btn-primary">Details</a> </td>
+                                <td><a href="{{ path('confirm-user', { user: account.user}) }}" class="btn btn-primary">Details</a> </td>
                             </tr>
                         {% endfor %}
 

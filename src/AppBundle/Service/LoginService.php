@@ -9,6 +9,7 @@
 namespace AppBundle\Service;
 
 
+use AppBundle\Domain\Enum\Role;
 use AppBundle\Domain\LoggedUser;
 use AppBundle\Domain\Result;
 use AppBundle\Model\ProfileDao;
@@ -54,12 +55,12 @@ class LoginService extends BaseService
             return $this->returnError(LoginService::$defaultError);
         }
 
-        if (!$profile->getActive()) {
+        if ($profile->active == 0) {
             $this->logger->error("profile it not active for user: ", [$userName]);
             return $this->returnError(LoginService::$defaultError);
         }
 
-        if ($user->getPassword() != $convertedPassword) {
+        if ($user->password != $convertedPassword) {
             $this->logger->error("invalid password for user: ",  [ $userName ]);
             return $this->returnError(LoginService::$defaultError);
         }
@@ -67,10 +68,10 @@ class LoginService extends BaseService
         $this->logger->info("user authenticated: ", [ $userName ]);
 
         $loggedUser = new LoggedUser();
-        $loggedUser->user = $user->getUser();
-        $loggedUser->email = $profile->getName();
-        $loggedUser->profileId = $profile->getId();
-        $loggedUser->roles = $user->getRole();
+        $loggedUser->user = $user->user;
+        $loggedUser->email = $profile->name;
+        $loggedUser->profileId = $profile->id;
+        $loggedUser->role = $user->role;
 
         return $this->returnValue($loggedUser);
     }
@@ -87,30 +88,28 @@ class LoginService extends BaseService
             ];
         }
 
-        $roles = $this->getUserRoles($userName);
+        $role = $this->getUserRole($userName);
         $options = array();
 
         $this->logger->info("information found for user: ", [ $userName ]);
 
-        foreach ($roles as  $role) {
-            if ($role->getName() == 'ADMIN') {
-                $this->logger->info("pulling admin options for user: ", [ $userName ]);
-                $options = array_merge($options, [
-//                    ["name" => "Accounts", "route" => "accounts"],
-                    ["name" => "Users", "route" => "list-users"],
+        if ($role == Role::admin()) {
+            $this->logger->info("pulling admin options for user: ", [ $userName ]);
+            $options = array_merge($options, [
+                ["name" => "Accounts", "route" => "accounts"],
+                ["name" => "Users", "route" => "list-users"],
 //                    ["name" => "Deposit", "route" => "deposit-inquiry"],
-                ]);
-            }
+            ]);
+        }
 
-            if ($role->getName() == 'USER') {
-                $this->logger->info("pulling user options for user: ", [ $userName ]);
-                $options = array_merge($options, [
-                    ["name" => "Beneficiaries", "route" => "beneficiaries"],
+        if ($role == Role::user()) {
+            $this->logger->info("pulling user options for user: ", [ $userName ]);
+            $options = array_merge($options, [
+                ["name" => "Beneficiaries", "route" => "beneficiaries"],
 //                    ["name" => "Transfers", "route" => "transfers"],
 //                    ["name" => "Deposit", "route" => "deposit"],
 //                    ["name" => "Transactions", "route" => "transactions"],
-                ]);
-            }
+            ]);
         }
 
         $options[] = ["name" => "Logout", "route" => "logout"];
@@ -118,10 +117,10 @@ class LoginService extends BaseService
         return $options;
     }
 
-    private function getUserRoles($userName) {
+    private function getUserRole($userName) {
         $user = $this->userDao->findByUserName($userName);
 
-        return $user->getRole();
+        return $user->role;
     }
 
 }

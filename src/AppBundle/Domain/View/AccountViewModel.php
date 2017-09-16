@@ -16,7 +16,7 @@ class AccountViewModel
      * @Assert\NotBlank()
      * @Assert\Length(min = 4, max = 12)
      */
-    public $number;
+    public $account;
 
     /**
      * @Assert\NotBlank()
@@ -24,4 +24,5 @@ class AccountViewModel
      * @Assert\GreaterThan(value = 0)
      */
     public $balance;
+
 }

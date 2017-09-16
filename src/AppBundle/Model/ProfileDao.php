@@ -25,40 +25,32 @@ class ProfileDao extends BaseDBDao
         parent::__construct($container, $logger, $registry);
     }
 
-    public function createUserProfile($name, $phone, $email, User $user) : Profile {
-        $profile = new Profile();
-
-        $profile->setName($name);
-        $profile->setPhone($phone);
-        $profile->setEmail($email);
-        $profile->setActive(0);
-        $profile->setUser($user);
-
-        $this->entityManager->persist($profile);
-        $this->entityManager->flush();
-
-        return $profile;
-    }
-
-    public function updateProfileStatus(Profile $profile, $status) {
-        $profile->setActive($status);
-
-        $this->entityManager->merge($profile);
-        $this->entityManager->flush();
-
-        return $profile;
+    public function updateProfileStatus($profileId, $status) {
+        try {
+            DB::update('profile', array(
+                'active' => $status
+            ), "id=%i", $profileId);
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
     public function findProfileByUserName($userName) {
-        $user = $this->repository
-            ->getRepository(User::class)
-            ->findOneBy(["user" => $userName]);
+        try {
+            $row = DB::queryFirstRow("select p.* from profile p " .
+                " inner join user u on p.user_id = u.id where u.user = %s",
+                $userName);
 
-        $profile = $this->repository
-            ->getRepository(Profile::class)
-            ->findOneBy(["user" => $user]);
+            if (isset($row)) {
+                return new \AppBundle\Domain\Profile($row['id'], $row['user_id'], $row['name'],
+                    $row['email'], $row['phone'], $row['active']);
+            }
 
-        return $profile;
+            return null;
+
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
     }
 
     public function getProfile($profileId) {
@@ -71,6 +63,22 @@ class ProfileDao extends BaseDBDao
             }
 
             return null;
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function newProfile($name, $email, $phone, $active, $userId) {
+        try {
+            DB::insert('profile', array(
+                'user_id' => $userId,
+                'name' => $name,
+                'email' => $email,
+                'phone' => $phone,
+                'active' => $active
+            ));
+
+            return $this->getLastInsertedId();
         } catch (\Exception $ex) {
             throw $ex;
         }

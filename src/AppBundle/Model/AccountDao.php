@@ -8,6 +8,7 @@
 
 namespace AppBundle\Model;
 
+use AppBundle\Domain\AccountProfile;
 use AppBundle\Entity\Account;
 use AppBundle\Entity\Profile;
 use DB;
@@ -28,18 +29,6 @@ class AccountDao extends BaseDBDao
         $this->logger = $logger;
     }
 
-    public function createAccount($accountNumber, $currency, Profile $profile) : Account {
-        $account = new Account();
-        $account->setNumber($accountNumber);
-        $account->setCurrency($currency);
-        $account->setProfile($profile);
-
-        $this->entityManager->persist($account);
-        $this->entityManager->flush();
-
-        return $account;
-    }
-
     public function newAccount($number, $profileId, $currency) {
         try {
             DB::insert('account', array(
@@ -55,11 +44,14 @@ class AccountDao extends BaseDBDao
         }
     }
 
-    public function associateAccountToProfile(Account $account, Profile $profile) {
-        $account->setProfile($profile);
-
-        $this->entityManager->merge($account);
-        $this->entityManager->flush();
+    public function associateAccountToProfile($accountId, $profileId) {
+        try {
+            DB::update('account', array(
+                'profile_id' => $profileId
+            ), "id=%s", $accountId);
+        } catch (\Exception $exception) {
+            throw $exception;
+        }
     }
 
     public function findByAccountNumber($accountNumber) {
@@ -71,12 +63,23 @@ class AccountDao extends BaseDBDao
 
     public function findAccountsWithProfile() {
         try {
-            $row = DB::query("select * from account where profile_id is not null");
+            $query = "select p.name, u.user, a.number, p.active, a.currency " .
+                " from account a " .
+                "   inner join profile p on a.profile_id = p.id " .
+                "   inner join user u on p.user_id = u.id";
 
-            if (isset($row)) {
-                return new \AppBundle\Domain\Account($row['id'], $row['profile_id'], null, $row['number'], $row['currency']);
+            $rows = DB::query($query);
+
+            if (isset($rows)) {
+                $accounts = array();
+                foreach ($rows as $row) {
+                    $accounts[] = new AccountProfile($row['name'], $row['user'], $row['number'], $row['currency'], $row['active']);
+                }
+
+                return $accounts;
             }
 
+            return null;
         } catch (\Exception $ex) {
             throw $ex;
         }
@@ -91,7 +94,6 @@ class AccountDao extends BaseDBDao
             }
 
             return null;
-
         } catch (\Exception $ex) {
             throw $ex;
         }
