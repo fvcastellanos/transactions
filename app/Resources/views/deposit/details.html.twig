@@ -1,0 +1,56 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
+        <a class="breadcrumb-item" href="{{ path('deposit-review') }}">Deposit</a>
+        <a class="breadcrumb-item active" href="{{ path('deposit-details', { id : requirement.id }) }}">Details</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Deposit Details</h1>
+                <form action="{{ path('deposit-update') }}" method="post">
+                    <input type="hidden" value="{{ requirement.id }}" name="id"/>
+                    <table class="table">
+                        <tr>
+                            <td>Date</td>
+                            <td>{{ requirement.requestedDate }}</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{ requirement.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Account</td>
+                            <td>{{ requirement.account }}</td>
+                        </tr>
+                        <tr>
+                            <td>Currency</td>
+                            <td>{{ requirement.currency }}</td>
+                        </tr>
+                        <tr>
+                            <td>Amount</td>
+                            <td>{{ requirement.amount }}</td>
+                        </tr>
+                        <tr>
+                            <td>Action</td>
+                            <td>
+                                <select name="action" class="form-control">
+                                    <option value="A">Accepted</option>
+                                    <option value="N">Denied</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                    <input type="submit" class="btn btn-primary" value="Update" />
+                    <a href="{{ path('deposit-review') }}" class="btn btn-success">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

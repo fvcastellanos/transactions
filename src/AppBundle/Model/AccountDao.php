@@ -8,9 +8,8 @@
 
 namespace AppBundle\Model;
 
+use AppBundle\Domain\Account;
 use AppBundle\Domain\AccountProfile;
-use AppBundle\Entity\Account;
-use AppBundle\Entity\Profile;
 use DB;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Psr\Log\LoggerInterface;
@@ -52,13 +51,6 @@ class AccountDao extends BaseDBDao
         } catch (\Exception $exception) {
             throw $exception;
         }
-    }
-
-    public function findByAccountNumber($accountNumber) {
-        $account = $this->repository->getRepository(Account::class)
-            ->findOneBy(['number' => $accountNumber]);
-
-        return $account;
     }
 
     public function findAccountsWithProfile() {
@@ -112,6 +104,27 @@ class AccountDao extends BaseDBDao
                 }
 
                 return $accounts;
+            }
+
+            return null;
+
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function getAccountForUser($userName) {
+        try {
+            $query = "select a.*, p.name " .
+                " from account a " .
+                "  inner join profile p on p.id = a.profile_id " .
+                "  inner join user u on p.user_id = u.id " .
+                " where u.user = %s";
+
+            $row = DB::queryFirstRow($query, $userName);
+
+            if (isset($row)) {
+                return new Account($row['id'], $row['profile_id'], $row['name'], $row['number'], $row['currency']);
             }
 
             return null;

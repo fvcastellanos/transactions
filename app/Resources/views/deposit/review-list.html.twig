@@ -1,0 +1,46 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
+        <a class="breadcrumb-item active" href="{{ path('deposit-review') }}">Deposit</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Deposit Requirements</h1>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Currency</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in requirements %}
+                            <tr>
+                                <td>{{ req.account }}</td>
+                                <td>{{ req.name }}</td>
+                                <td>{{ req.requestedDate }}</td>
+                                <td>{{ req.currency }}</td>
+                                <td>{{ req.amount }}</td>
+                                <td><a href="{{ path('deposit-details', { id: req.id }) }}" class="btn btn-primary">Details</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <a href="{{ path('welcome') }}" class="btn btn-primary">Home</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -58,7 +58,6 @@ class BaseController extends Controller
 
     protected function logoutUser() {
         $_SESSION['loggedUser'] = null;
-//        session_destroy();
     }
 
     protected function renderWithMenu($view, $model) {

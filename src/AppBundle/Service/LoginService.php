@@ -69,7 +69,8 @@ class LoginService extends BaseService
 
         $loggedUser = new LoggedUser();
         $loggedUser->user = $user->user;
-        $loggedUser->email = $profile->name;
+        $loggedUser->email = $profile->email;
+        $loggedUser->name = $profile->name;
         $loggedUser->profileId = $profile->id;
         $loggedUser->role = $user->role;
 
@@ -107,7 +108,7 @@ class LoginService extends BaseService
             $options = array_merge($options, [
                 ["name" => "Beneficiaries", "route" => "beneficiaries"],
 //                    ["name" => "Transfers", "route" => "transfers"],
-//                    ["name" => "Deposit", "route" => "deposit"],
+                    ["name" => "Deposit", "route" => "requirement"],
 //                    ["name" => "Transactions", "route" => "transactions"],
             ]);
         }
