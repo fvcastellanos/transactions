@@ -74,6 +74,23 @@ class AccountController extends BaseController
         return $this->renderWithMenu('account/new.html.twig', ['form' => $form->createView()]);
     }
 
+
+    /**
+     * @Route("/details", name="account-details")
+     */
+    public function detailsAction(Request $request) {
+        $user = $this->getLoggedUser();
+
+        $info = $this->service->getTransactionDetails($user->profileId);
+
+        if ($info->hasErrors()) {
+            return $this->renderError($info->getErrors());
+        }
+
+        $details = $info->getObject();
+        return $this->renderWithMenu('account/details.html.twig', $details);
+    }
+
     private function buildNewAccountForm($model) {
 
         return $this->createFormBuilder($model)

@@ -23,20 +23,20 @@ class TransactionTypeEnum
     }
 
 
-    public static function transfer() {
-        return new TransactionTypeEnum("Transfer");
+    public static function transferWithdraw() {
+        return new TransactionTypeEnum("Transfer withdraw");
     }
 
-    public static function withdraw() {
-        return new TransactionTypeEnum("Withdraw");
-    }
-
-    public static function deposit() {
-        return new TransactionTypeEnum("Deposit");
+    public static function transferDeposit() {
+        return new TransactionTypeEnum("Transfer deposit");
     }
 
     public static function initialDeposit() {
         return new TransactionTypeEnum("Initial Deposit");
+    }
+
+    public static function deposit() {
+        return new TransactionTypeEnum("Deposit");
     }
 
 }

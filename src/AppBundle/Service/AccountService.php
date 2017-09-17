@@ -58,11 +58,30 @@ class AccountService extends BaseService
             $this->accountDao->newAccount($number, null, "GTQ");
             $account = $this->accountDao->getAccount($number);
             $this->transactionDao->createCreditTransaction(TransactionTypeEnum::initialDeposit(),
-                $account->id, TransactionDescription::initialDeposit(), "GTQ", $balance);
+                $account->id, TransactionDescription::initialDeposit(), "GTQ", $balance, null);
 
             return $this->returnValue($account);
         } catch (\Exception $ex) {
             $this->logger->error("can't create accounts: ", [ $ex ]);
+            return $this->returnError($ex->getMessage());
+        }
+    }
+
+    public function getTransactionDetails($profileId) : Result {
+        try {
+            $account = $this->accountDao->getAccountByProfile($profileId);
+
+            if (!isset($account)) {
+                return $this->returnError("can't get account from profile");
+            }
+
+            $details = $this->transactionDao->getTransactionDetails($account->id);
+            $balance = $this->transactionDao->getBalance($account->id);
+
+            $value = array('balance' => $balance, 'details' => $details);
+
+            return $this->returnValue($value);
+        } catch(\Exception $ex) {
             return $this->returnError($ex->getMessage());
         }
     }

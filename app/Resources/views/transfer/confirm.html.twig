@@ -1,0 +1,16 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
+        <a class="breadcrumb-item active" href="{{ path('transfer') }}">Transfer</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <h1>Transfer</h1>
+    <p>
+        We have received your transfer request, it will be processed immediately, thanks for using Banco Popular
+        <a href="{{ path('welcome') }}" class="btn btn-success">Home</a>
+    </p>
+{% endblock %}

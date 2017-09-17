@@ -99,7 +99,7 @@ class LoginService extends BaseService
             $options = array_merge($options, [
                 ["name" => "Accounts", "route" => "accounts"],
                 ["name" => "Users", "route" => "list-users"],
-//                    ["name" => "Deposit", "route" => "deposit-inquiry"],
+                ["name" => "Requirements", "route" => "requirement"],
             ]);
         }
 
@@ -107,9 +107,9 @@ class LoginService extends BaseService
             $this->logger->info("pulling user options for user: ", [ $userName ]);
             $options = array_merge($options, [
                 ["name" => "Beneficiaries", "route" => "beneficiaries"],
-//                    ["name" => "Transfers", "route" => "transfers"],
-                    ["name" => "Deposit", "route" => "requirement"],
-//                    ["name" => "Transactions", "route" => "transactions"],
+                ["name" => "Transfers", "route" => "transfer"],
+                ["name" => "Deposit", "route" => "requirement"],
+                ["name" => "Transactions", "route" => "account-details"],
             ]);
         }
 

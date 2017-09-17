@@ -106,7 +106,7 @@ class DepositService extends BaseService
             if ($action == 'A') {
                 $requirement = $this->depositDao->getDepositRequirement($id);
                 $this->transactionDao->createCreditTransaction(TransactionTypeEnum::deposit(), $requirement->accountId,
-                    $reason, $requirement->currency, $requirement->amount);
+                    $reason, $requirement->currency, $requirement->amount, null);
             }
 
             $this->depositDao->updateDepositRequirement($id, $reason, $action);

@@ -133,4 +133,24 @@ class AccountDao extends BaseDBDao
             throw $ex;
         }
     }
+
+    public function getAccountByProfile($profileId)
+    {
+        try {
+            $query = "select * " .
+                " from account " .
+                " where profile_id = %i";
+
+            $row = DB::queryFirstRow($query, $profileId);
+
+            if (isset($row)) {
+                return new Account($row['id'], $row['profile_id'], null, $row['number'], $row['currency']);
+            }
+
+            return null;
+
+        } catch (\Exception $ex) {
+            throw $ex;
+        }
+    }
 }

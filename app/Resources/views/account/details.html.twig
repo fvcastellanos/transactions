@@ -1,0 +1,73 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('account-details') }}">Details</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Account details</h1>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Account</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Currency</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Other Account</th>
+                        <th>Other Name</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for det in details %}
+                        <tr>
+                            <td>{{ det.account }}</td>
+                            <td>{{ det.date }}</td>
+                            <td>{{ det.type }}</td>
+                            <td>{{ det.description }}</td>
+                            <td>{{ det.currency }}</td>
+                            <td>
+                                {% if (det.credit == 0) %}
+                                    {{ det.amount }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if (det.credit == 1) %}
+                                    {{ det.amount }}
+                                {% endif %}
+                            </td>
+                            <td>{{ det.otherAccount }}</td>
+                            <td>{{ det.otherName }}</td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+                <table class="table table-striped">
+                    <tr>
+                        <td>Credits</td>
+                        <td>{{ balance.credits }}</td>
+                    </tr>
+                    <tr>
+                        <td>Debits</td>
+                        <td>{{ balance.debits }}</td>
+                    </tr>
+                    <tr>
+                        <td>Balance</td>
+                        <td>{{ balance.balance }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

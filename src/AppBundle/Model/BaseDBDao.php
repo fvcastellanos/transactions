@@ -34,6 +34,18 @@ class BaseDBDao extends BaseDao
         DB::$dbName = $this->getDbName();
     }
 
+    public function beginTransaction() {
+        DB::startTransaction();
+    }
+
+    public function commit() {
+        DB::commit();
+    }
+
+    public function rollback() {
+        DB::rollback();
+    }
+
     protected function getDbHost() {
         return $this->container->getParameter('database_host');
     }
