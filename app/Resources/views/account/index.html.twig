@@ -1,0 +1,41 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('accounts') }}">Account</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Accounts</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Account</th>
+                            <th>Currency</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for account in accounts %}
+                            <tr>
+                                <td>{{ account.number }}</td>
+                                <td>{{ account.currency }}</td>
+                                <td>{{ account.name }}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+                <a href="{{ path('new-account') }}" class="btn btn-success">New</a>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

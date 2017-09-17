@@ -1,0 +1,63 @@
+{% extends 'layout.html.twig' %}
+
+{% import 'macros.html.twig' as utils %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('register') }}">Sign Up</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Register</h1>
+                {{ form_start(form) }}
+                    <div class="form-group">
+                        {{ form_label(form.account) }}
+                        {{ form_widget(form.account, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.account) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.name) }}
+                        {{ form_widget(form.name, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.phone) }}
+                        {{ form_widget(form.phone, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.phone) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.user) }}
+                        {{ form_widget(form.user, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.user) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.password) }}
+                        {{ form_widget(form.password, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.password) }}
+                    </div>
+                    <div class="form-group">
+                        {{ form_label(form.confirmPassword) }}
+                        {{ form_widget(form.confirmPassword, { 'attr' : { 'class' : 'form-control' }}) }}
+                        {{ form_errors(form.confirmPassword) }}
+                    </div>
+                    {{ form_row(form.create, { 'attr' : { 'class' : 'btn btn-primary' }}) }}
+                {{ form_end(form) }}
+
+                {% if app_errors is defined %}
+                    {{ utils.showApplicationErrors(app_errors) }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

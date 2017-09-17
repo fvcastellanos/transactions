@@ -1,0 +1,7 @@
+{% macro showApplicationErrors(errors) %}
+    <ul>
+        {% for error in errors %}
+            <li class="error-list">{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endmacro %}

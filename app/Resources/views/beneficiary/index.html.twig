@@ -1,0 +1,46 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
+        <a class="breadcrumb-item active" href="{{ path('beneficiaries') }}">Beneficiaries</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Beneficiaries</h1>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Alias</th>
+                            <th>Account</th>
+                            <th>Name</th>
+                            <th>Max Amount</th>
+                            <th>Quota</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for beneficiary in beneficiaries %}
+                            <tr>
+                                <td>{{ beneficiary.alias }}</td>
+                                <td>{{ beneficiary.account }}</td>
+                                <td>{{ beneficiary.name }}</td>
+                                <td>{{ beneficiary.maxAmountTransfer }}</td>
+                                <td>{{ beneficiary.transactionsQuota }}</td>
+                                <td><a href="{{ path('beneficiary-details', { id: beneficiary.id }) }}" class="btn btn-primary">Details</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <a href="{{ path('new-beneficiary') }}" class="btn btn-primary">Create</a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'layout.html.twig' %}
+
+{% import 'macros.html.twig' as utils %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Home</a>
+        <a class="breadcrumb-item" href="{{ path('accounts') }}">Account</a>
+        <a class="breadcrumb-item active" href="{{ path('new-account') }}">New Account</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Accounts</h1>
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.account) }}
+                    {{ form_widget(form.account, { 'attr' : { 'class' : 'form-control' }}) }}
+                    {{ form_errors(form.account) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.balance) }}
+                    {{ form_widget(form.balance, { 'attr' : { 'class' : 'form-control' }}) }}
+                    {{ form_errors(form.balance) }}
+                </div>
+                {{ form_row(form.create, { 'attr' : { 'class' : 'btn btn-primary' }}) }}
+                {{ form_end(form) }}
+
+                {% if app_errors is defined %}
+                    {{ utils.showApplicationErrors(app_errors) }}
+                {% endif %}
+
+                <a href="{{ path('accounts') }}" class="btn btn-success">Accounts</a>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('register') }}">Sign Up</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>User list</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Name</th>
+                            <th>Account</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for account in accounts %}
+                            <tr>
+                                <td>{{ account.user }}</td>
+                                <td>{{ account.name }}</td>
+                                <td>{{ account.account }}</td>
+                                {% if account.active == 0 %}
+                                    <td>Inactive</td>
+                                {% else %}
+                                    <td>Active</td>
+                                {% endif %}
+                                <td><a href="{{ path('confirm-user', { user: account.user}) }}" class="btn btn-primary">Details</a> </td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+                <a href="{{ path('homepage') }}" class="btn btn-success">Home</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

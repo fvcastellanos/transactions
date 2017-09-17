@@ -1,0 +1,44 @@
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('homepage') }}">Home</a>
+        <a class="breadcrumb-item active" href="{{ path('login') }}">Login</a>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Login</h1>
+                <p>
+                    Please enter your credentials to access this site:
+                </p>
+                {{ form_start(form) }}
+                <div class="form-group">
+                    {{ form_label(form.user) }}
+                    {{ form_widget(form.user, { 'attr' : { 'class' : 'form-control' }}) }}
+                    {{ form_errors(form.user) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.password) }}
+                    {{ form_widget(form.password, { 'attr' : { 'class' : 'form-control' }}) }}
+                    {{ form_errors(form.password) }}
+                </div>
+                {{ form_row(form.login, { 'attr' : { 'class' : 'btn btn-primary' }}) }}
+                {{ form_end(form) }}
+
+                {% if app_errors is defined %}
+                    <ul>
+                        {% for error in app_errors %}
+                            <li class="error-list">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
