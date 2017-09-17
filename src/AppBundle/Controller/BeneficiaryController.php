@@ -81,6 +81,47 @@ class BeneficiaryController extends BaseController
             'form' => $form->createView()));
     }
 
+    /**
+     *
+     * @Route("/details/{id}", name="beneficiary-details")
+     * @Method("GET")
+     */
+    public function detailsAction(Request $request, $id) {
+        if (!isset($id)) {
+            $this->renderError("beneficiary not found");
+        }
+
+        $result = $this->service->getBeneficiary($id);
+
+        if ($result->hasErrors()) {
+            return $this->renderError("can't get beneficiary info");
+        }
+
+        return $this->renderWithMenu('beneficiary/show.html.twig', array('b' => $result->getObject()));
+    }
+
+    /**
+     *
+     * @Route("/details", name="beneficiary-remove")
+     * @Method("POST")
+     */
+    public function removeAction(Request $request) {
+        $id = $request->get('id');
+
+        if (!isset($id)) {
+            return $this->renderError('no beneficiary found');
+        }
+
+        $result = $this->service->deleteBeneficiary($id);
+
+        if ($result->hasErrors()) {
+            return $this->renderError($result->getErrors());
+        }
+
+        return $this->redirectToRoute('beneficiaries');
+
+    }
+
     private function buildNewBeneficiaryStepI($model) {
 
         return $this->createFormBuilder($model)
@@ -88,7 +129,7 @@ class BeneficiaryController extends BaseController
             ->add('alias', TextType::class)
             ->add('maxAmount', NumberType::class)
             ->add('transferQuota', NumberType::class)
-            ->add('check', SubmitType::class, ['label' => 'Check account'])
+            ->add('check', SubmitType::class, ['label' => 'Create'])
             ->getForm();
     }
 

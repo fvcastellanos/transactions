@@ -16,8 +16,9 @@
                     <table class="table">
                         <thead>
                         <tr>
-                            <th>Id</th>
                             <th>Alias</th>
+                            <th>Account</th>
+                            <th>Name</th>
                             <th>Max Amount</th>
                             <th>Quota</th>
                             <th>Actions</th>
@@ -26,20 +27,12 @@
                         <tbody>
                         {% for beneficiary in beneficiaries %}
                             <tr>
-                                <td><a href="{{ path('show-beneficiary', { 'id': beneficiary.id }) }}">{{ beneficiary.id }}</a></td>
                                 <td>{{ beneficiary.alias }}</td>
+                                <td>{{ beneficiary.account }}</td>
+                                <td>{{ beneficiary.name }}</td>
                                 <td>{{ beneficiary.maxAmountTransfer }}</td>
                                 <td>{{ beneficiary.transactionsQuota }}</td>
-                                <td>
-                                    <ul>
-                                        <li>
-                                            <a href="{{ path('show-beneficiary', { 'id': beneficiary.id }) }}">show</a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ path('edit-beneficiary', { 'id': beneficiary.id }) }}">edit</a>
-                                        </li>
-                                    </ul>
-                                </td>
+                                <td><a href="{{ path('beneficiary-details', { id: beneficiary.id }) }}" class="btn btn-primary">Details</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>

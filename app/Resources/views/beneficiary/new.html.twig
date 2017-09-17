@@ -1,5 +1,7 @@
 {% extends 'layout.html.twig' %}
 
+{% import 'macros.html.twig' as utils %}
+
 {% block breadcrumb %}
     <nav class="breadcrumb">
         <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
@@ -36,16 +38,6 @@
     {{ form_end(form) }}
 
     {% if app_errors is defined %}
-        <ul>
-            {% for error in app_errors %}
-                <li class="error-list">{{ error }}</li>
-            {% endfor %}
-        </ul>
+        {{ utils.showApplicationErrors(app_errors) }}
     {% endif %}
-
-    <ul>
-        <li>
-            <a href="{{ path('beneficiaries') }}">Back to the list</a>
-        </li>
-    </ul>
 {% endblock %}

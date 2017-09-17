@@ -1,0 +1,2 @@
+ALTER TABLE `transactions`.`beneficiary`
+CHANGE COLUMN `id` `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ;

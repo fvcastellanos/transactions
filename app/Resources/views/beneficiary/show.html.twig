@@ -1,44 +1,47 @@
-{% extends 'base.html.twig' %}
+{% extends 'layout.html.twig' %}
+
+{% block breadcrumb %}
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="{{ path('welcome') }}">Welcome</a>
+        <a class="breadcrumb-item" href="{{ path('beneficiaries') }}">Beneficiaries</a>
+        <a class="breadcrumb-item" href="{{ path('beneficiary-details', { id : b.id }) }}">Details</a>
+    </nav>
+{% endblock %}
 
 {% block body %}
-    <h1>Beneficiary</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Beneficiary details</h1>
+                <form action="{{ path('beneficiary-remove') }}" method="post">
+                    <input type="hidden" value="{{ b.id }}" name="id"/>
+                    <table class="table">
+                        <tr>
+                            <td>Alias</td>
+                            <td>{{ b.alias }}</td>
+                        </tr>
+                        <tr>
+                            <td>Account</td>
+                            <td>{{ b.account }}</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{ b.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Max Amount</td>
+                            <td>{{ b.maxAmountTransfer }}</td>
+                        </tr>
+                        <tr>
+                            <td>Quota</td>
+                            <td>{{ b.transactionsQuota }}</td>
+                        </tr>
+                    </table>
+                    <input type="submit" class="btn btn-danger" value="Remove" />
+                    <a href="{{ path('beneficiaries') }}" class="btn btn-success">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ beneficiary.id }}</td>
-            </tr>
-            <tr>
-                <th>Alias</th>
-                <td>{{ beneficiary.alias }}</td>
-            </tr>
-            <tr>
-                <th>Maxamounttransfer</th>
-                <td>{{ beneficiary.maxAmountTransfer }}</td>
-            </tr>
-            <tr>
-                <th>Transactionsquota</th>
-                <td>{{ beneficiary.transactionsQuota }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <td>{% if beneficiary.created %}{{ beneficiary.created|date('Y-m-d H:i:s') }}{% endif %}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <ul>
-        <li>
-            <a href="{{ path('beneficiary_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('beneficiary_edit', { 'id': beneficiary.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
 {% endblock %}

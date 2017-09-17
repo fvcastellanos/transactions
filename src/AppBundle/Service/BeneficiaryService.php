@@ -61,7 +61,14 @@ class BeneficiaryService extends BaseService
                 return $this->returnError("selected profile is not active");
             }
 
-            $this->beneficiaryDao->createBeneficiary($account->id, $model->alias, $model->maxAmount, $model->transferQuota);
+            $beneficiary = $this->beneficiaryDao->getBeneficiaryBy($profileId, $account->id);
+
+            if (isset($beneficiary)) {
+                return $this->returnError("beneficiary already added");
+            }
+
+            $this->beneficiaryDao->createBeneficiary($profileId, $account->id, $model->alias,
+                $model->maxAmount, $model->transferQuota);
 
             $result = array('account' => $account, 'profile' => $profile);
 
@@ -72,4 +79,27 @@ class BeneficiaryService extends BaseService
             return $this->returnError($ex->getMessage());
         }
     }
+
+    public function getBeneficiary($id) {
+        try {
+            $beneficiary = $this->beneficiaryDao->getBeneficiary($id);
+
+            return $this->returnValue($beneficiary);
+        } catch (\Exception $ex) {
+            $this->logger->error("can't get beneficiary: ", [$ex]);
+            return $this->returnError($ex->getMessage());
+        }
+    }
+
+    public function deleteBeneficiary($id) {
+        try {
+            $this->beneficiaryDao->deleteBeneficiary($id);
+
+            return $this->returnValue($id);
+        } catch (\Exception $ex) {
+            $this->logger->error("can't get beneficiary: ", [$ex]);
+            return $this->returnError($ex->getMessage());
+        }
+    }
+
 }
