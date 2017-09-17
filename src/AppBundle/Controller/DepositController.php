@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Deposit controller.
@@ -47,6 +48,7 @@ class DepositController extends BaseController
     /**
      *
      * @Route("/requirement", name="requirement")
+     * @Security("has_role('USER')")
      */
     public function requirementAction(Request $request) {
         $account = $this->getAccountFromSignedUser();
@@ -78,6 +80,7 @@ class DepositController extends BaseController
     /**
      * @Route("/review", name="deposit-review")
      * @Method("GET")
+     * @Security("has_role('ADMIN')")
      */
     public function reviewAction(Request $request) {
         $result = $this->service->getDepositRequirements();
@@ -92,6 +95,7 @@ class DepositController extends BaseController
     /**
      * @Route("/details/{id}", name="deposit-details")
      * @Method("GET")
+     * @Security("has_role('ADMIN')")
      */
     public function detailsAction(Request $request, $id) {
         if (!isset($id)) {
@@ -110,6 +114,7 @@ class DepositController extends BaseController
     /**
      * @Route("/details", name="deposit-update")
      * @Method("POST")
+     * @Security("has_role('ADMIN')")
      */
     public function updateAction(Request $request) {
 

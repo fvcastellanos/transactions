@@ -14,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
  * Account controller.
@@ -83,6 +85,7 @@ class RegisterController extends BaseController
 
     /**
      * @Route("/users", name="list-users", methods="GET")
+     * @Security("has_role('ADMIN')")
      */
     public function listUsers() {
         $result = $this->service->getAccountList();
@@ -112,6 +115,7 @@ class RegisterController extends BaseController
 
     /**
      * @Route("/confirm/{user}", name="confirm-user", methods="GET")
+     * @Security("has_role('ADMIN')")
      */
     public function confirmAction($user) {
         $result = $this->service->getProfileByUserName($user);
@@ -128,6 +132,7 @@ class RegisterController extends BaseController
 
     /**
      * @Route("/confirm", name="update-user", methods="POST")
+     * @Security("has_role('ADMIN')")
      */
     public function updateAction(Request $request) {
         $userName = $_POST['user'];

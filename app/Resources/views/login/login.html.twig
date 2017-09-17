@@ -15,25 +15,30 @@
                 <p>
                     Please enter your credentials to access this site:
                 </p>
-                {{ form_start(form) }}
-                <div class="form-group">
-                    {{ form_label(form.user) }}
-                    {{ form_widget(form.user, { 'attr' : { 'class' : 'form-control' }}) }}
-                    {{ form_errors(form.user) }}
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.password) }}
-                    {{ form_widget(form.password, { 'attr' : { 'class' : 'form-control' }}) }}
-                    {{ form_errors(form.password) }}
-                </div>
-                {{ form_row(form.login, { 'attr' : { 'class' : 'btn btn-primary' }}) }}
-                {{ form_end(form) }}
 
-                {% if app_errors is defined %}
+                <form action="{{ path('login') }}" method="post">
+                    <div class="form-group">
+                        <label for="username">User</label>
+                        <input type="text" id="username" name="_username" value="{{ lastUserName }}" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="_password" class="form-control" />
+                    </div>
+
+
+                    {#
+                        If you want to control the URL the user
+                        is redirected to on success (more details below)
+                    #}
+                    <input type="hidden" name="_target_path" value="/welcome" />
+
+                    <input type="submit" class="btn btn-primary" value="Login" />
+                </form>
+
+                {% if error %}
                     <ul>
-                        {% for error in app_errors %}
-                            <li class="error-list">{{ error }}</li>
-                        {% endfor %}
+                        <li class="error-list">{{ error.messageKey|trans(error.messageData, 'security') }}</li>
                     </ul>
                 {% endif %}
 

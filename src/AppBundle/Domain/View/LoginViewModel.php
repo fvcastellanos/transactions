@@ -15,7 +15,7 @@ class LoginViewModel
     /**
      * @Assert\NotBlank()
      */
-    public $user;
+    public $username;
 
     /**
      * @Assert\NotBlank()

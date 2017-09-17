@@ -99,7 +99,7 @@ class LoginService extends BaseService
             $options = array_merge($options, [
                 ["name" => "Accounts", "route" => "accounts"],
                 ["name" => "Users", "route" => "list-users"],
-                ["name" => "Requirements", "route" => "requirement"],
+                ["name" => "Requirements", "route" => "deposit-review"],
             ]);
         }
 
@@ -113,7 +113,7 @@ class LoginService extends BaseService
             ]);
         }
 
-        $options[] = ["name" => "Logout", "route" => "logout"];
+        $options[] = ["name" => "Logout", "route" => "exit"];
 
         return $options;
     }

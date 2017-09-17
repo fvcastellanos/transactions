@@ -85,5 +85,4 @@ class BaseController extends Controller
     protected function renderError($error) {
         return $this->renderWithMenu("error.html.twig", ['error' => $error]);
     }
-
 }

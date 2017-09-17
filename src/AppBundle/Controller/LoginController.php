@@ -17,6 +17,9 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 class LoginController extends BaseController
 {
@@ -37,45 +40,26 @@ class LoginController extends BaseController
     /**
      * @Route("/login", name="login")
      */
-    public function loginAction(Request $request) {
-        $model = new LoginViewModel();
-        $form = $this->buildLoginForm($model);
+    public function loginAction(Request $request, AuthenticationUtils $authUtils) {
+        $error = $authUtils->getLastAuthenticationError();
+        $lastUsername = $authUtils->getLastUsername();
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $formData = $form->getData();
-            $validationErrors = $this->validateFormModel($formData);
-
-            if ($this->hasErrors($validationErrors)) {
-                return $this->renderValidationErrors($this->loginView, $form, $validationErrors);
-            }
-
-            $result = $this->loginService->validateUser($model->user, $model->password);
-
-            if ($result->hasErrors()) {
-                return $this->renderAppErrors($this->loginView, $form, $result->getErrors());
-            }
-
-            $this->storeLoggedUser($result->getObject());
-
-            return $this->redirectToRoute("welcome");
-        }
-
-        return $this->renderWithMenu($this->loginView, [ 'form' => $form->createView()]);
+        return $this->renderWithMenu($this->loginView, [ 'error' => $error,
+            'lastUserName' => $lastUsername]);
     }
 
     /**
-     * @Route("/logout", name="logout")
+     * @Route("/exit", name="exit")
      */
     public function logoutAction(Request $request) {
         $this->logoutUser();
 
-        return $this->redirectToRoute("homepage");
+        return $this->redirectToRoute("logout");
     }
 
     /**
      * @Route("/welcome", name="welcome")
+     * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
      */
     public function welcomeAction(Request $request) {
 
@@ -85,7 +69,7 @@ class LoginController extends BaseController
     private function buildLoginForm($model) {
 
         return $this->createFormBuilder($model)
-            ->add('user', TextType::class)
+            ->add('username', TextType::class)
             ->add('password', PasswordType::class)
             ->add('login', SubmitType::class, ['label' => 'Login'])
             ->getForm();
