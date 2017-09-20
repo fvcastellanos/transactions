@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+  app:
+    container_name: application
+    build: .
+    volumes:
+      - "/apps"
+    extra_hosts:
+      - "mysql:192.168.99.1"
+
+  nginx:
+    container_name: nginx
+    build: docker/nginx
+    volumes_from:
+      - app
+    ports:
+      - "8000:80"
+    extra_hosts:
+      - "mysql:192.168.99.1"
