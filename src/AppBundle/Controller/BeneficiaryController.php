@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 /**
@@ -34,6 +35,7 @@ class BeneficiaryController extends BaseController
      *
      * @Route("/", name="beneficiaries")
      * @Method("GET")
+     * @Security("has_role('USER')")
      */
     public function indexAction()
     {
@@ -57,6 +59,7 @@ class BeneficiaryController extends BaseController
      *
      * @Route("/new", name="new-beneficiary")
      * @Method({"GET", "POST"})
+     * @Security("has_role('USER')")
      */
     public function newAction(Request $request)
     {
@@ -85,6 +88,7 @@ class BeneficiaryController extends BaseController
      *
      * @Route("/details/{id}", name="beneficiary-details")
      * @Method("GET")
+     * @Security("has_role('USER')")
      */
     public function detailsAction(Request $request, $id) {
         if (!isset($id)) {
@@ -104,6 +108,7 @@ class BeneficiaryController extends BaseController
      *
      * @Route("/details", name="beneficiary-remove")
      * @Method("POST")
+     * @Security("has_role('USER')")
      */
     public function removeAction(Request $request) {
         $id = $request->get('id');

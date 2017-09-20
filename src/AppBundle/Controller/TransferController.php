@@ -18,6 +18,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+
 
 /**
  * Transfer controller.
@@ -44,6 +46,7 @@ class TransferController extends BaseController
     /**
      *
      * @Route("/", name="transfer")
+     * @Security("has_role('USER')")
      */
     public function indexAction(Request $request) {
         $model = new TransferViewModel();

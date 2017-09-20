@@ -1,0 +1,7 @@
+insert into user (user, password, role)
+values ('admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'ADMIN');
+
+select id into @adminId from user where user = 'admin';
+
+insert into profile (user_id, name, email, phone, active)
+values (@adminId, 'Admin User', 'admin@popular.com', '12345678', 1);

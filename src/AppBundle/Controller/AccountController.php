@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Account controller.
@@ -41,8 +42,10 @@ class AccountController extends BaseController
 
     /**
      * @Route("/", name="accounts")
+     * @Security("has_role('ADMIN')")
      */
     public function indexAction(Request $request) {
+
         $result = $this->service->getAccounts();
 
         if ($result->hasErrors()) {
@@ -54,6 +57,7 @@ class AccountController extends BaseController
 
     /**
      * @Route("/new", name="new-account")
+     * @Security("has_role('ADMIN')")
      */
     public function newAction(Request $request) {
         $model = new AccountViewModel();
@@ -77,6 +81,7 @@ class AccountController extends BaseController
 
     /**
      * @Route("/details", name="account-details")
+     * @Security("has_role('USER')")
      */
     public function detailsAction(Request $request) {
         $user = $this->getLoggedUser();
