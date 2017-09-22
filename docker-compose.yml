@@ -4,18 +4,18 @@ services:
 
   app:
     container_name: application
-    build: .
+    image: apps.cavitos.net/transactions:1.0
     volumes:
       - "/apps"
     extra_hosts:
-      - "mysql:192.168.99.1"
+      - "cavitos-db:10.132.169.169"
 
   nginx:
     container_name: nginx
-    build: docker/nginx
+    image: apps.cavitos.net/nginx:1.13
     volumes_from:
       - app
     ports:
-      - "8000:80"
+      - "45002:80"
     extra_hosts:
-      - "mysql:192.168.99.1"
+      - "cavitos-db:10.132.169.169"
