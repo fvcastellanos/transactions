@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+
+  app:
+    container_name: application
+    image: apps.cavitos.net/transactions:1.0
+    volumes:
+      - "/apps"
+    extra_hosts:
+      - "cavitos-db:10.132.169.169"
+
+  nginx:
+    container_name: nginx
+    image: apps.cavitos.net/nginx:1.13
+    volumes_from:
+      - app
+    ports:
+      - "45002:80"
+    extra_hosts:
+      - "cavitos-db:10.132.169.169"
